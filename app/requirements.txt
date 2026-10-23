@@ -1,0 +1,17 @@
+# Lean runtime dependencies for the Streamlit dashboard.
+# Optional DistilBERT training dependencies (torch/transformers/datasets) are not
+# needed to serve the three saved benchmark models.
+streamlit==1.38.0
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.5.2
+xgboost==2.1.1
+joblib==1.4.2
+matplotlib==3.9.2
+seaborn==0.13.2
+shap==0.46.0
+lime==0.2.0.1
+pypdf>=4.0,<6.0
+python-docx>=1.1,<2.0
+pyyaml==6.0.2

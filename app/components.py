@@ -331,70 +331,212 @@ def render_chunk_deep_dive(analysis: Dict[str, Any]):
 # ── Model Performance Dashboard ──────────────────────────────────────────────
 
 def render_metrics_dashboard():
-    """Render the verified academic performance benchmark and hypothesis testing results."""
-    st.markdown("### 📊 Model Performance on Held-Out Test Set ($N = 11,900$)")
-    st.caption("All metrics independently recalculated and verified against data/processed/test.parquet.")
+    """Render a clearer, decision-focused dashboard for the verified HC3 benchmark."""
+    st.markdown("## 📊 Model Performance Dashboard")
+    st.caption(
+        "Held-out evaluation on 11,900 HC3 answer samples · 7,963 human-written · "
+        "3,937 AI-generated · Same test examples for all models"
+    )
 
     metrics_df = load_model_metrics()
-    if metrics_df is not None and not metrics_df.empty:
-        display_cols = [
-            c for c in ["model", "accuracy", "precision", "recall", "f1", "roc_auc", "pr_auc", "mcc", "specificity"]
-            if c in metrics_df.columns
-        ]
-        st.dataframe(
-            metrics_df[display_cols].style.format(
-                {c: "{:.4f}" for c in display_cols if c != "model"}
-            ).highlight_max(
-                subset=[c for c in display_cols if c != "model"],
-                color="#dcfce7",
-            ),
-            use_container_width=True,
-        )
+    if metrics_df is None or metrics_df.empty:
+        st.error("Verified model metrics could not be loaded. Check results/metrics/model_comparison.csv.")
+        return
 
-    # Statistical Significance (McNemar) Box
-    st.markdown("#### 🔬 Verified Hypothesis Testing (Pairwise McNemar's Tests)")
-    stat_df = load_statistical_tests_df()
-    if stat_df is not None and not stat_df.empty:
-        st.dataframe(
-            stat_df[
-                ["comparison", "both_correct", "model_a_only_correct", "model_b_only_correct",
-                 "both_wrong", "statistic", "p_value", "exact_p_value", "significant", "interpretation"]
-            ].style.format(
-                {"statistic": "{:.4f}", "p_value": "{:.6f}", "exact_p_value": "{:.6f}"}
-            ),
-            use_container_width=True,
-        )
+    df = metrics_df.copy()
+    if "model" not in df.columns:
+        st.error("The model comparison file is missing the required 'model' column.")
+        return
 
-        st.info(
+    numeric_metrics = [
+        "accuracy", "precision", "recall", "f1", "macro_f1", "weighted_f1",
+        "balanced_accuracy", "mcc", "specificity", "roc_auc", "pr_auc"
+    ]
+    for col in numeric_metrics:
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+
+    df = df.dropna(subset=["model"]).reset_index(drop=True)
+    if df.empty:
+        st.warning("No usable model rows were found in the saved metrics.")
+        return
+
+    # Headline values are read from the saved evaluation file, not hard-coded.
+    best_accuracy = df.loc[df["accuracy"].idxmax()] if "accuracy" in df else None
+    best_f1 = df.loc[df["f1"].idxmax()] if "f1" in df else None
+    best_auc = df.loc[df["roc_auc"].idxmax()] if "roc_auc" in df else None
+
+    k1, k2, k3, k4 = st.columns(4)
+    with k1:
+        if best_accuracy is not None:
+            st.metric("Top test accuracy", f"{best_accuracy['accuracy']:.2%}",
+                      help=f"Model: {best_accuracy['model']}")
+            st.caption(str(best_accuracy["model"]))
+    with k2:
+        if best_f1 is not None:
+            st.metric("Top F1-score", f"{best_f1['f1']:.4f}",
+                      help=f"Model: {best_f1['model']}")
+            st.caption(str(best_f1["model"]))
+    with k3:
+        if best_auc is not None:
+            st.metric("Top ROC-AUC", f"{best_auc['roc_auc']:.4f}",
+                      help=f"Model: {best_auc['model']}")
+            st.caption(str(best_auc["model"]))
+    with k4:
+        st.metric("Held-out samples", "11,900")
+        st.caption("One shared test set")
+
+    st.divider()
+    st.markdown("### Model comparison")
+    st.write(
+        "The chart compares the main classification measures. Accuracy shows overall correctness; "
+        "precision and recall describe the AI-generated class; F1 balances precision and recall."
+    )
+
+    chart_metrics = [c for c in ["accuracy", "f1", "precision", "recall"] if c in df.columns]
+    if chart_metrics:
+        chart_df = df.set_index("model")[chart_metrics].copy()
+        chart_df = chart_df.rename(columns={
+            "accuracy": "Accuracy", "f1": "F1-score",
+            "precision": "Precision", "recall": "Recall"
+        }) * 100
+        st.bar_chart(chart_df, use_container_width=True)
+        st.caption("Values are percentages. The plotted values come from the saved held-out test metrics.")
+
+    display_names = {
+        "accuracy": "Accuracy", "precision": "Precision", "recall": "Recall",
+        "f1": "F1", "macro_f1": "Macro-F1", "weighted_f1": "Weighted-F1",
+        "balanced_accuracy": "Balanced accuracy", "mcc": "MCC",
+        "specificity": "Specificity", "roc_auc": "ROC-AUC", "pr_auc": "PR-AUC"
+    }
+    table_cols = [c for c in ["model"] + numeric_metrics if c in df.columns]
+    table_df = df[table_cols].rename(columns=display_names)
+    pct_cols = [display_names[c] for c in [
+        "accuracy", "precision", "recall", "f1", "macro_f1", "weighted_f1",
+        "balanced_accuracy", "specificity", "roc_auc", "pr_auc"
+    ] if c in table_cols]
+    format_map = {c: "{:.2%}" for c in pct_cols}
+    if "MCC" in table_df.columns:
+        format_map["MCC"] = "{:.4f}"
+    st.dataframe(
+        table_df.style.format(format_map).highlight_max(
+            subset=[c for c in pct_cols + (["MCC"] if "MCC" in table_df.columns else [])
+                    if c in table_df.columns],
+            color="#e4f4ec"
+        ),
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    with st.expander("How to read these results", expanded=True):
+        st.markdown(
             """
-            **Statistical Interpretation Summary**:
-            - **Linear SVM vs. Logistic Regression**: $\\chi^2 = 2.1316, p = 0.1443$ (Exact $p = 0.1433$).
-              *No statistically significant difference* at $\\alpha = 0.05$. Both linear TF-IDF architectures demonstrate functionally equivalent performance.
-            - **Linear Models vs. XGBoost**: $\\chi^2 = 78.56, p < 0.000001$ for SVM; $\\chi^2 = 69.66, p < 0.000001$ for LR.
-              *Statistically significant advantage* for lexical TF-IDF models over pure stylometry ($+1.66\\%$ accuracy, $+2.46\\%$ F1).
+            - **Linear SVM** has the highest observed accuracy (98.61%) and F1-score (0.9790).
+            - **Logistic Regression** is very close and has slightly higher ROC-AUC and PR-AUC.
+            - **XGBoost** uses 21 stylometric measurements rather than the TF-IDF vocabulary.
+            - Strong benchmark scores do not prove authorship. Results can change for short passages,
+              different domains, edited text, and newer language models.
             """
         )
 
-    # ROC Curves & Confusion Matrices
-    st.markdown("#### 📈 Saved Figures & ROC Curves")
-    c1, c2 = st.columns(2)
-    with c1:
-        svm_roc = FIGURES_DIR / "linear_svm_roc_curve.png"
-        if svm_roc.exists():
-            st.image(str(svm_roc), caption="Linear SVM ROC Curve (AUC = 0.9986)")
-    with c2:
-        lr_roc = FIGURES_DIR / "logistic_regression_roc_curve.png"
-        if lr_roc.exists():
-            st.image(str(lr_roc), caption="Logistic Regression ROC Curve (AUC = 0.9987)")
+    tab_domain, tab_stats, tab_curves = st.tabs(
+        ["🌐 Domain performance", "🧪 Statistical tests", "📈 Diagnostic figures"]
+    )
 
-    # Domain Breakdown
-    st.markdown("#### 🌐 Cross-Domain Performance Breakdown")
-    domain_map = load_domain_metrics_map()
-    if domain_map:
-        tabs = st.tabs(list(domain_map.keys()))
-        for tab, (m_name, df_dom) in zip(tabs, domain_map.items()):
-            with tab:
-                st.dataframe(df_dom, use_container_width=True)
+    with tab_domain:
+        st.markdown("#### Performance by source domain")
+        st.caption("Domain results are useful because a strong overall score can hide weaker categories.")
+        domain_map = load_domain_metrics_map()
+        domain_frames = []
+        for model_name, dom_df in domain_map.items():
+            if not {"domain", "f1"}.issubset(dom_df.columns):
+                continue
+            tmp = dom_df[["domain", "f1"]].copy()
+            tmp["f1"] = pd.to_numeric(tmp["f1"], errors="coerce")
+            tmp["Model"] = model_name
+            domain_frames.append(tmp)
+
+        if domain_frames:
+            domains = pd.concat(domain_frames, ignore_index=True).dropna(subset=["f1"])
+            pivot = domains.pivot_table(index="domain", columns="Model", values="f1", aggfunc="first")
+            st.bar_chart(pivot * 100, use_container_width=True)
+            st.dataframe(
+                pivot.style.format("{:.2%}").highlight_max(axis=1, color="#e4f4ec"),
+                use_container_width=True,
+            )
+            st.caption("Green cells indicate the highest F1-score within a domain.")
+        else:
+            st.info("Domain-level metrics are not available in this repository copy.")
+
+    with tab_stats:
+        st.markdown("#### Paired McNemar significance tests")
+        st.write(
+            "Each pair is evaluated on the same test examples. The test checks whether their "
+            "disagreement in correctness is large enough to support a statistical difference."
+        )
+        stat_df = load_statistical_tests_df()
+        if stat_df is not None and not stat_df.empty:
+            pair_cols = [
+                c for c in [
+                    "comparison", "both_correct", "model_a_only_correct",
+                    "model_b_only_correct", "both_wrong", "statistic",
+                    "p_value", "exact_p_value", "significant", "interpretation"
+                ] if c in stat_df.columns
+            ]
+            shown = stat_df[pair_cols].copy()
+            for col in ["p_value", "exact_p_value"]:
+                if col in shown.columns:
+                    shown[col] = shown[col].apply(
+                        lambda value: "< 0.000001" if pd.notna(value) and float(value) < 0.000001
+                        else (f"{float(value):.6f}" if pd.notna(value) else "—")
+                    )
+            if "statistic" in shown.columns:
+                shown["statistic"] = pd.to_numeric(shown["statistic"], errors="coerce").map(
+                    lambda value: f"{value:.4f}" if pd.notna(value) else "—"
+                )
+            st.dataframe(shown, use_container_width=True, hide_index=True)
+
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                st.markdown("**SVM vs Logistic Regression**")
+                st.metric("p-value", "0.1443")
+                st.caption("Not statistically significant at α = 0.05.")
+            with c2:
+                st.markdown("**SVM vs XGBoost**")
+                st.metric("p-value", "< 0.000001")
+                st.caption("Statistically significant difference.")
+            with c3:
+                st.markdown("**Logistic Regression vs XGBoost**")
+                st.metric("p-value", "< 0.000001")
+                st.caption("Statistically significant difference.")
+        else:
+            st.info("Verified pairwise statistical results could not be loaded.")
+
+    with tab_curves:
+        st.markdown("#### ROC curves and feature-importance figure")
+        st.caption("These saved plots complement the interactive comparison above.")
+        c1, c2 = st.columns(2)
+        with c1:
+            svm_roc = FIGURES_DIR / "linear_svm_roc_curve.png"
+            if svm_roc.exists():
+                st.image(str(svm_roc), caption="Linear SVM ROC curve")
+            else:
+                st.info("Linear SVM ROC curve not found.")
+        with c2:
+            lr_roc = FIGURES_DIR / "logistic_regression_roc_curve.png"
+            if lr_roc.exists():
+                st.image(str(lr_roc), caption="Logistic Regression ROC curve")
+            else:
+                st.info("Logistic Regression ROC curve not found.")
+
+        xgb_shap = FIGURES_DIR / "xgb_shap_summary.png"
+        if xgb_shap.exists():
+            st.image(str(xgb_shap), caption="XGBoost SHAP summary")
+
+    st.info(
+        "Research-use notice: these are benchmark estimates, not proof of authorship. "
+        "A human review is required before making consequential decisions."
+    )
 
 
 # ── Explainability Deep Dive ─────────────────────────────────────────────────

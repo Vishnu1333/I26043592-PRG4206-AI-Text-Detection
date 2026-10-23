@@ -322,6 +322,11 @@ Note: the package includes a DistilBERT training script for optional future expe
 
 ## Google Colab Verification and Output PDF
 
+**Launch this notebook in Google Colab:** [Open PRG4206 Colab notebook](https://colab.research.google.com/github/Vishnu1333/I26043592-PRG4206-AI-Text-Detection/blob/main/notebooks/00_PRG4206_Colab_Run_and_Outputs.ipynb)
+
+**Current output summary:** [View the PDF on GitHub](https://github.com/Vishnu1333/I26043592-PRG4206-AI-Text-Detection/blob/main/outputs/PRG4206_Project_Outputs_Summary.pdf) — it is a pre-run summary until the notebook is executed successfully.
+
+
 This package includes `notebooks/00_PRG4206_Colab_Run_and_Outputs.ipynb`. Open it in Google Colab and run the cells from top to bottom. When prompted, upload this project ZIP. The notebook installs `requirements-colab.txt`, runs the test suite, independently verifies the saved test-set statistics, checks predictions from Logistic Regression / Linear SVM / XGBoost, and smoke-tests TXT/PDF/DOCX document analysis.
 
 After execution, it writes:

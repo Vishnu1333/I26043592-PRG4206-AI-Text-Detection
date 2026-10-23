@@ -208,6 +208,21 @@ streamlit run app/app.py
 
 ---
 
+## Live Dashboard Deployment (Streamlit Community Cloud)
+
+This repository is configured for a lightweight dashboard deployment:
+- Entry point: `app/app.py`
+- Dashboard-specific dependencies: `app/requirements.txt` (keeps optional model-training packages out of the web runtime)
+- Theme: `.streamlit/config.toml`
+
+To publish a live link:
+1. Open [Streamlit Community Cloud](https://share.streamlit.io/) and sign in with the GitHub account that owns this public repository.
+2. Click **Create app** / **Deploy an app** and choose repository `Vishnu1333/I26043592-PRG4206-AI-Text-Detection`, branch `main`, and main file path `app/app.py`.
+3. Open **Advanced settings** and choose **Python 3.11**, matching the project environment.
+4. Click **Deploy** and wait for the dependency installation and app health checks to finish. If the app reports a build or runtime error, open the app's logs and fix that before sharing the URL.
+
+After the app is deployed, commits to the selected GitHub branch are detected by Community Cloud and the live app refreshes when the new version has built successfully. Editing a local copy alone does not update GitHub; changes must first be committed and pushed.
+
 ## Streamlit UI & Document Analysis Architecture
 
 The web interface features five primary navigation views:

@@ -212,16 +212,21 @@ streamlit run app/app.py
 
 This repository is configured for a lightweight dashboard deployment:
 - Entry point: `app/app.py`
-- Dashboard-specific dependencies: `app/requirements.txt` (keeps optional model-training packages out of the web runtime)
+- Dashboard dependencies: `app/requirements.txt`
 - Theme: `.streamlit/config.toml`
 
-To publish a live link:
-1. Open [Streamlit Community Cloud](https://share.streamlit.io/) and sign in with the GitHub account that owns this public repository.
-2. Click **Create app** / **Deploy an app** and choose repository `Vishnu1333/I26043592-PRG4206-AI-Text-Detection`, branch `main`, and main file path `app/app.py`.
-3. Open **Advanced settings** and choose **Python 3.11**, matching the project environment.
-4. Click **Deploy** and wait for the dependency installation and app health checks to finish. If the app reports a build or runtime error, open the app's logs and fix that before sharing the URL.
+### Important: Python version
 
-After the app is deployed, commits to the selected GitHub branch are detected by Community Cloud and the live app refreshes when the new version has built successfully. Editing a local copy alone does not update GitHub; changes must first be committed and pushed.
+The saved models and pinned numerical packages are aligned with **Python 3.11**. The Streamlit Cloud log from the initial deployment shows Python 3.14.9, which caused older pinned wheels (including Pillow 10.4.0) to be built from source and fail. The app-specific dependency file has now been reduced to runtime packages and explicitly pins Pillow 10.4.0, but **the Python version must also be corrected**.
+
+Community Cloud does not let you change an already-deployed app's Python version in place. For the currently failed app:
+1. In the app's Cloud logs, open the three-dot menu and choose **Delete app**. Delete only the Streamlit app, not this GitHub repository.
+2. Re-create/deploy the app using this repository, branch `main`, and entry point `app/app.py`.
+3. Open **Advanced settings** and choose **Python 3.11**.
+4. Reuse the current app subdomain `i26043592-prg4206-ai-text-detection-yrkebtrl2ejz3xztazdkch` if the field is available, so the final link remains the same.
+5. Deploy and inspect Cloud logs until the app reports a successful startup.
+
+After the app is deployed, commits to the selected GitHub branch are detected by Community Cloud. Dependency changes trigger a full dependency installation/redeploy; ordinary code changes are usually faster.
 
 ## Streamlit UI & Document Analysis Architecture
 

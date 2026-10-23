@@ -1,6 +1,6 @@
-# Lean runtime dependencies for the Streamlit dashboard.
-# Optional DistilBERT training dependencies (torch/transformers/datasets) are not
-# needed to serve the three saved benchmark models.
+# Lean Streamlit Cloud runtime for Python 3.11.
+# Heavy optional training/explainability packages (torch, transformers, SHAP, LIME)
+# are not required to serve the three bundled models or display saved SHAP plots.
 streamlit==1.38.0
 numpy==1.26.4
 pandas==2.2.2
@@ -11,8 +11,7 @@ joblib==1.4.2
 nltk==3.9.1
 matplotlib==3.9.2
 seaborn==0.13.2
-shap==0.46.0
-lime==0.2.0.1
+Pillow==10.4.0
 pypdf>=4.0,<6.0
 python-docx>=1.1,<2.0
 pyyaml==6.0.2

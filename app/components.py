@@ -24,32 +24,75 @@ from src.config import FIGURES_DIR, METRICS_DIR
 # ── Header & Banner ──────────────────────────────────────────────────────────
 
 def render_header():
-    """Render top application header and research badges."""
+    """Render a modern, responsive hero header for the research dashboard."""
     st.markdown(
         """
-        <div style='text-align: center; padding: 10px 0 20px 0;'>
-            <h1 style='color: #0f172a; font-weight: 800; font-size: 2.3rem; margin-bottom: 0.3rem;'>
-                🤖 AI-Generated Text Detection System
-            </h1>
-            <p style='color: #475569; font-size: 1.1rem; margin-top: 0;'>
-                A Comparative and Explainable Machine Learning System | <b>PRG4206 Research Prototype</b>
-            </p>
-            <div style='display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 8px;'>
-                <span style='background-color: #e0f2fe; color: #0369a1; padding: 4px 12px; border-radius: 16px; font-size: 0.85rem; font-weight: 600;'>
-                    HC3 Benchmark (79,331 Samples)
-                </span>
-                <span style='background-color: #f1f5f9; color: #334155; padding: 4px 12px; border-radius: 16px; font-size: 0.85rem; font-weight: 600;'>
-                    3 Validated ML Models
-                </span>
-                <span style='background-color: #dcfce7; color: #15803d; padding: 4px 12px; border-radius: 16px; font-size: 0.85rem; font-weight: 600;'>
-                    Linear SVM: 98.61% Acc / 0.9790 F1
-                </span>
-                <span style='background-color: #fef3c7; color: #b45309; padding: 4px 12px; border-radius: 16px; font-size: 0.85rem; font-weight: 600;'>
-                    Explainable AI (SHAP & LIME)
-                </span>
-            </div>
-        </div>
-        <hr style='border: none; border-top: 1px solid #e2e8f0; margin-bottom: 25px;'/>
+        <style>
+        .prg-hero {
+            padding: 1.7rem 1.9rem 1.45rem 1.9rem;
+            border-radius: 20px;
+            margin: 0.1rem 0 1.15rem 0;
+            background: linear-gradient(120deg, #10224b 0%, #1d4ed8 67%, #0786b8 100%);
+            box-shadow: 0 10px 28px rgba(20, 42, 92, 0.16);
+            color: #ffffff;
+        }
+        .prg-hero .eyebrow {
+            margin: 0 0 0.55rem 0;
+            color: #dbeafe;
+            font-size: 0.76rem;
+            font-weight: 750;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+        }
+        .prg-hero h1 {
+            color: #ffffff !important;
+            font-size: clamp(1.65rem, 3.2vw, 2.55rem);
+            font-weight: 800;
+            line-height: 1.12;
+            margin: 0 0 0.55rem 0;
+            letter-spacing: -0.025em;
+        }
+        .prg-hero .lead {
+            color: #eff6ff;
+            font-size: 1rem;
+            line-height: 1.55;
+            max-width: 880px;
+            margin: 0 0 1.05rem 0;
+        }
+        .prg-hero .pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.48rem;
+        }
+        .prg-hero .pill {
+            display: inline-block;
+            color: #ffffff;
+            background: rgba(255,255,255,0.13);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 999px;
+            padding: 0.36rem 0.72rem;
+            font-size: 0.78rem;
+            font-weight: 650;
+        }
+        @media (max-width: 680px) {
+            .prg-hero { padding: 1.2rem; border-radius: 15px; }
+            .prg-hero .lead { font-size: 0.93rem; }
+        }
+        </style>
+        <section class="prg-hero">
+          <div class="eyebrow">PRG4206 · Machine Learning Research Prototype</div>
+          <h1>AI-Generated Text Detection</h1>
+          <p class="lead">
+            Explore a transparent comparison of three machine-learning models.
+            Test text, inspect writing-style signals, and review the evidence behind the benchmark results.
+          </p>
+          <div class="pills">
+            <span class="pill">HC3 · 79,331 cleaned samples</span>
+            <span class="pill">3 evaluated models</span>
+            <span class="pill">SVM · 98.61% accuracy</span>
+            <span class="pill">SHAP · LIME · Domain analysis</span>
+          </div>
+        </section>
         """,
         unsafe_allow_html=True,
     )

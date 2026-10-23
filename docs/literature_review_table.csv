@@ -1,0 +1,12 @@
+study,year,dataset,model,task,accuracy,precision,recall,f1,roc_auc,notes
+"Guo et al. (arXiv:2301.07597)",2023,HC3,"RoBERTa fine-tuned",Binary classification (human vs ChatGPT),Not reported,Not reported,Not reported,"~0.95 (approx. from paper)",Not reported,"Original HC3 paper; reports high detection accuracy with RoBERTa"
+"Guo et al. (arXiv:2301.07597)",2023,HC3,TF-IDF + SVM,Binary classification,Not reported,Not reported,Not reported,Not reported,Not reported,"Baseline classical model reported in original paper"
+"He et al. (arXiv:2305.00616)",2023,HC3 + others,BERT fine-tuned,Detection (multi-domain),Not reported,Not reported,Not reported,Not reported,Not reported,"Explores generalization across domains"
+"Mitchell et al. (ICML 2023)",2023,Various GPT outputs,DetectGPT (zero-shot),Zero-shot detection,Not reported,Not reported,Not reported,Not reported,Not reported,"Zero-shot; no training data; uses log-probability perturbation"
+"Sanh et al. (arXiv:1910.01108)",2019,GLUE,DistilBERT,Multiple NLP tasks,Not reported,Not reported,Not reported,Not reported,Not reported,"DistilBERT base model used for fine-tuning in this project"
+"Lundberg & Lee (NeurIPS 2017)",2017,N/A,SHAP,XAI framework,N/A,N/A,N/A,N/A,N/A,"Unified SHAP framework used for model explanation"
+"Ribeiro et al. (KDD 2016)",2016,N/A,LIME,XAI framework,N/A,N/A,N/A,N/A,N/A,"LIME local explanation framework used in this project"
+"OpenAI GPT-2 detector (Solaiman et al. 2019)",2019,GPT-2 outputs,RoBERTa fine-tuned,GPT-2 text detection,"0.95+",Not reported,Not reported,Not reported,Not reported,"Detector released with GPT-2; shown to overfit to GPT-2 style"
+"Zellers et al. (2019 — GROVER)",2019,GROVER news,GROVER detector,Fake news detection,"~0.73",Not reported,Not reported,Not reported,Not reported,"Domain-specific; does not generalise to HC3"
+"Antoun et al. (2023 — ArABERT)",2023,Arabic AI text,AraBERT,Arabic AI detection,Not reported,Not reported,Not reported,Not reported,Not reported,"Non-English; included to show domain of prior work"
+"Ippolito et al. (2020)",2020,GPT-2 / XLNet outputs,RoBERTa,Zero-shot + supervised detection,Not reported,Not reported,Not reported,Not reported,Not reported,"Shows human evaluation performs poorly; models outperform humans"

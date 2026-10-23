@@ -1,0 +1,129 @@
+======================================================================
+STATISTICAL VERIFICATION AUDIT LOG
+PRG4206 Individual Assignment: AI-Generated Text Detection System
+======================================================================
+Timestamp (UTC) : 2026-10-20T23:41:39.645823+00:00
+Test Set Size   : 11,900
+Class Breakdown : Human = 7,963, AI = 3,937
+Sample Alignment: All 11900 samples identically ordered across all 3 models: True
+Parquet Match   : Identical to data/processed/test.parquet: True
+
+----------------------------------------------------------------------
+1. SOURCE PREDICTION FILES
+----------------------------------------------------------------------
+- Linear SVM         : results/predictions/linear_svm_predictions.csv (N=11900)
+- Logistic Regression: results/predictions/logistic_regression_predictions.csv (N=11900)
+- XGBoost            : results/predictions/xgboost_predictions.csv (N=11900)
+
+----------------------------------------------------------------------
+2. METRIC VERIFICATION SUMMARY
+----------------------------------------------------------------------
+Comparison against results/metrics/model_comparison.csv:
+              model            metric  reported_value  recalculated_value  absolute_difference                          status
+         Linear SVM          accuracy          0.9861            0.986134             0.000034 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM         precision          0.9831            0.983094             0.000006 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM            recall          0.9749            0.974854             0.000046 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM                f1          0.9790            0.978957             0.000043 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM          macro_f1          0.9843            0.984309             0.000009 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM       weighted_f1          0.9861            0.986120             0.000020 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM balanced_accuracy          0.9833            0.983283             0.000017 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM               mcc          0.9686            0.968637             0.000037 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM       specificity          0.9917            0.991712             0.000012 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM           roc_auc          0.9986            0.998632             0.000032 MINOR_FLOATING_POINT_DIFFERENCE
+         Linear SVM            pr_auc          0.9976            0.997620             0.000020 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression          accuracy          0.9853            0.985294             0.000006 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression         precision          0.9798            0.979847             0.000047 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression            recall          0.9756            0.975616             0.000016 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression                f1          0.9777            0.977727             0.000027 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression          macro_f1          0.9834            0.983375             0.000025 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression       weighted_f1          0.9853            0.985286             0.000014 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression balanced_accuracy          0.9828            0.982848             0.000048 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression               mcc          0.9668            0.966755             0.000045 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression       specificity          0.9901            0.990079             0.000021 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression           roc_auc          0.9987            0.998660             0.000040 MINOR_FLOATING_POINT_DIFFERENCE
+Logistic Regression            pr_auc          0.9977            0.997667             0.000033 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost          accuracy          0.9695            0.969496             0.000004 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost         precision          0.9452            0.945192             0.000008 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost            recall          0.9637            0.963678             0.000022 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost                f1          0.9543            0.954345             0.000045 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost          macro_f1          0.9657            0.965721             0.000021 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost       weighted_f1          0.9696            0.969569             0.000031 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost balanced_accuracy          0.9680            0.968025             0.000025 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost               mcc          0.9315            0.931543             0.000043 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost       specificity          0.9724            0.972372             0.000028 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost           roc_auc          0.9943            0.994333             0.000033 MINOR_FLOATING_POINT_DIFFERENCE
+            XGBoost            pr_auc          0.9876            0.987551             0.000049 MINOR_FLOATING_POINT_DIFFERENCE
+
+Total Metrics Checked: 33
+Matches              : 0
+Minor Floating Point : 33 (due to 4-decimal rounding)
+Mismatches           : 0
+
+----------------------------------------------------------------------
+3. CONFUSION MATRICES (VERIFIED)
+----------------------------------------------------------------------
+              model   tn  fp  fn   tp  total  actual_human  actual_ai  predicted_human  predicted_ai  total_verified
+         Linear SVM 7897  66  99 3838  11900          7963       3937             7996          3904            True
+Logistic Regression 7884  79  96 3841  11900          7963       3937             7980          3920            True
+            XGBoost 7743 220 143 3794  11900          7963       3937             7886          4014            True
+
+----------------------------------------------------------------------
+4. PAIRWISE McNEMAR TESTS & STATISTICAL DISCREPANCY AUDIT
+----------------------------------------------------------------------
+                       comparison             model_a             model_b  both_correct  model_a_only_correct  model_b_only_correct  both_wrong  discordant_total                                                test_method  statistic  p_value  exact_p_value  alpha  significant                          interpretation
+Linear SVM vs Logistic Regression          Linear SVM Logistic Regression         11711                    24                    14         151                38 McNemar (continuity-corrected chi-square + exact binomial)     2.1316 0.144292       0.143307   0.05        False No statistically significant difference
+            Linear SVM vs XGBoost          Linear SVM             XGBoost         11389                   346                   148          17               494 McNemar (continuity-corrected chi-square + exact binomial)    78.5607 0.000000       0.000000   0.05         True    Statistically significant difference
+   Logistic Regression vs XGBoost Logistic Regression             XGBoost         11380                   345                   157          18               502 McNemar (continuity-corrected chi-square + exact binomial)    69.6594 0.000000       0.000000   0.05         True    Statistically significant difference
+
+CRITICAL DISCREPANCY EXPLANATION:
+--------------------------------
+In the previous run, mcnemar_results.json reported for Linear SVM vs Logistic Regression:
+  b00 = 11,711, b01 = 24, b10 = 14, b11 = 151
+  chi2 = 9299.8898, p = 0.0 (Reported as statistically significant)
+
+ROOT CAUSE OF THE OLD STATISTIC:
+  The original src/statistical_tests.py improperly called `scipy.stats.chi2_contingency(table)`
+  on the 2x2 paired classification contingency table [[b00, b01], [b10, b11]].
+  `chi2_contingency` is Pearson's test of independence for an R x C cross-tabulation.
+  It tests whether Model A's correctness is statistically independent of Model B's correctness.
+  Because both classifiers are highly accurate, their decisions are overwhelmingly correlated,
+  producing an artificially massive Pearson chi-square value of 9,299.89.
+
+VERIFIED CORRECT McNEMAR CALCULATION:
+  McNemar's test tests marginal homogeneity (H0: P(b01) = P(b10)) and uses ONLY the discordant
+  cells (b01 = 24, b10 = 14, discordant total = 38).
+  Applying the continuity-corrected McNemar formula (|b01 - b10| - 1)^2 / (b01 + b10):
+    chi2 = (|24 - 14| - 1)^2 / (24 + 14) = 9^2 / 38 = 81 / 38 = 2.1316
+    p-value (asymptotic, df=1) = 0.144292
+    p-value (exact binomial test, n=38, k=14) = 0.143307
+
+VERIFIED CONCLUSION:
+  At alpha = 0.05, p = 0.1443 > 0.05. The difference in error distribution between Linear SVM
+  and Logistic Regression is NOT statistically significant. Both models perform equivalently.
+
+  Conversely, for Linear SVM vs XGBoost (chi2 = 78.5607, p < 0.0001) and Logistic Regression
+  vs XGBoost (chi2 = 69.6594, p < 0.0001), the advantage of TF-IDF linear classifiers over
+  purely stylometric XGBoost IS statistically significant.
+
+----------------------------------------------------------------------
+5. EFFECT SIZES (RAW PERFORMANCE DIFFERENTIALS)
+----------------------------------------------------------------------
+- Linear SVM vs Logistic Regression:
+    Delta Accuracy = +0.000840 (+0.08%)
+    Delta F1       = +0.001230 (+0.12%)
+    Delta ROC-AUC  = -0.000027 (-0.00%)
+    Note: Linear SVM has +0.08% accuracy and +0.12% F1 relative to Logistic Regression.
+- Linear SVM vs XGBoost:
+    Delta Accuracy = +0.016639 (+1.66%)
+    Delta F1       = +0.024611 (+2.46%)
+    Delta ROC-AUC  = +0.004300 (+0.43%)
+    Note: Linear SVM has +1.66% accuracy and +2.46% F1 relative to XGBoost.
+- Logistic Regression vs XGBoost:
+    Delta Accuracy = +0.015798 (+1.58%)
+    Delta F1       = +0.023382 (+2.34%)
+    Delta ROC-AUC  = +0.004327 (+0.43%)
+    Note: Logistic Regression has +1.58% accuracy and +2.34% F1 relative to XGBoost.
+
+======================================================================
+END OF AUDIT LOG
+======================================================================

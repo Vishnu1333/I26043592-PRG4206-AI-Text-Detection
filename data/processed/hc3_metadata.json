@@ -1,0 +1,35 @@
+{
+  "name": "HC3 \u2014 Human ChatGPT Comparison Corpus",
+  "hf_repo": "Hello-SimpleAI/HC3",
+  "subset": "all",
+  "license": "CC BY-SA 4.0",
+  "paper": "How Close is ChatGPT to Human Experts? Comparison Corpus, Evaluation, and Detection. Guo et al., 2023. arXiv:2301.07597",
+  "url": "https://huggingface.co/datasets/Hello-SimpleAI/HC3",
+  "label_0": "human",
+  "label_1": "ai",
+  "download_date": "2026-10-20T07:13:42.739251+00:00",
+  "total_rows": 79331,
+  "human_rows": 53086,
+  "ai_rows": 26245,
+  "domains": [
+    "finance",
+    "medicine",
+    "open_qa",
+    "reddit_eli5",
+    "wiki_csai"
+  ],
+  "columns": [
+    "text",
+    "label",
+    "label_name",
+    "source",
+    "question",
+    "answer_index",
+    "char_count",
+    "word_count",
+    "sentence_count"
+  ],
+  "original": 85431,
+  "duplicates_removed": 6100,
+  "after_dedup": 79331
+}

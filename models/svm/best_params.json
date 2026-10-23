@@ -1,0 +1,9 @@
+{
+  "model": "Linear SVM",
+  "best_params": {
+    "clf__estimator__C": 10,
+    "clf__estimator__class_weight": "balanced"
+  },
+  "best_cv_f1": 0.9806,
+  "train_time_s": 379.98
+}

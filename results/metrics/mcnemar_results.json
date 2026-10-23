@@ -1,0 +1,56 @@
+[
+  {
+    "test": "McNemar's Test",
+    "model_a": "linear_svm",
+    "model_b": "logistic_regression",
+    "contingency": {
+      "b00": 11711,
+      "b01": 24,
+      "b10": 14,
+      "b11": 151
+    },
+    "discordant_total": 38,
+    "chi2": 2.1316,
+    "p_value": 0.144292,
+    "exact_p_value": 0.143307,
+    "alpha": 0.05,
+    "significant": false,
+    "interpretation": "The difference between linear_svm and logistic_regression is NOT statistically significant at \u03b1=0.05 (McNemar \u03c7\u00b2=2.1316, p=0.1443, exact p=0.1433)."
+  },
+  {
+    "test": "McNemar's Test",
+    "model_a": "linear_svm",
+    "model_b": "xgboost",
+    "contingency": {
+      "b00": 11389,
+      "b01": 346,
+      "b10": 148,
+      "b11": 17
+    },
+    "discordant_total": 494,
+    "chi2": 78.5607,
+    "p_value": 0.0,
+    "exact_p_value": 0.0,
+    "alpha": 0.05,
+    "significant": true,
+    "interpretation": "The difference between linear_svm and xgboost is statistically significant at \u03b1=0.05 (McNemar \u03c7\u00b2=78.5607, p=0.0000, exact p=0.0000)."
+  },
+  {
+    "test": "McNemar's Test",
+    "model_a": "logistic_regression",
+    "model_b": "xgboost",
+    "contingency": {
+      "b00": 11380,
+      "b01": 345,
+      "b10": 157,
+      "b11": 18
+    },
+    "discordant_total": 502,
+    "chi2": 69.6594,
+    "p_value": 0.0,
+    "exact_p_value": 0.0,
+    "alpha": 0.05,
+    "significant": true,
+    "interpretation": "The difference between logistic_regression and xgboost is statistically significant at \u03b1=0.05 (McNemar \u03c7\u00b2=69.6594, p=0.0000, exact p=0.0000)."
+  }
+]

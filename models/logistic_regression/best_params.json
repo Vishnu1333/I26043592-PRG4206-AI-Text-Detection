@@ -1,0 +1,11 @@
+{
+  "model": "Logistic Regression",
+  "best_params": {
+    "clf__C": 100,
+    "clf__class_weight": "balanced",
+    "clf__max_iter": 1000,
+    "clf__solver": "liblinear"
+  },
+  "best_cv_f1": 0.9804,
+  "train_time_s": 706.89
+}

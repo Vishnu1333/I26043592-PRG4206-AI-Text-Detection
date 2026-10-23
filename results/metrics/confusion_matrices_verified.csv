@@ -1,0 +1,4 @@
+model,tn,fp,fn,tp,total,actual_human,actual_ai,predicted_human,predicted_ai,total_verified
+Linear SVM,7897,66,99,3838,11900,7963,3937,7996,3904,True
+Logistic Regression,7884,79,96,3841,11900,7963,3937,7980,3920,True
+XGBoost,7743,220,143,3794,11900,7963,3937,7886,4014,True

@@ -1,0 +1,2 @@
+model,accuracy,precision,recall,f1,macro_f1,weighted_f1,balanced_accuracy,mcc,specificity,roc_auc,pr_auc
+XGBoost,0.9695,0.9452,0.9637,0.9543,0.9657,0.9696,0.968,0.9315,0.9724,0.9943,0.9876

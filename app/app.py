@@ -64,7 +64,7 @@ ensure_dirs()
 
 def render_sidebar():
     """Render a compact Apple-inspired top navigation and model selector."""
-    brand_col, nav_col, model_col = st.columns([1.35, 4.2, 1.65])
+    brand_col, nav_col, model_col = st.columns([1.15, 5.9, 1.75])
     with brand_col:
         st.markdown(
             """
@@ -83,6 +83,13 @@ def render_sidebar():
             nav_options,
             horizontal=True,
             label_visibility="collapsed",
+            format_func=lambda value: {
+                "Detect": "Detect",
+                "Documents": "Documents",
+                "Performance": "Results",
+                "Explainability": "Explain",
+                "Methodology": "About",
+            }.get(value, value),
             index=0,
             key="prg_main_navigation",
         )

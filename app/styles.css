@@ -1256,3 +1256,75 @@ body { text-rendering: optimizeLegibility; }
     width: 100% !important;
     box-sizing: border-box !important;
 }
+
+
+/* Dashboard navigation repair: compact the header and keep page headings clear of it. */
+/* Do not let a tall sticky widget row cover the top of the active dashboard page. */
+[data-testid="stHorizontalBlock"]:has([data-testid="stRadio"]) {
+    position: relative !important;
+    top: auto !important;
+    z-index: 2 !important;
+    padding: .35rem .5rem !important;
+    margin: 0 0 1.1rem !important;
+    min-height: 0 !important;
+    background: rgba(17,22,6,.96) !important;
+    border: 1px solid rgba(226,239,197,.12) !important;
+    border-radius: 18px !important;
+    box-sizing: border-box !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stRadio"]) [data-testid="column"] {
+    min-width: 0 !important;
+    align-self: center !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] {
+    align-items: center !important;
+    gap: .22rem !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+    max-width: 100% !important;
+    min-height: 44px !important;
+}
+[data-testid="stRadio"] [role="radiogroup"]::-webkit-scrollbar {
+    display: none !important;
+}
+/* Streamlit's radio glyph becomes a clean text pill; the selected state remains visible on the label. */
+[data-testid="stRadio"] [role="radiogroup"] > label > div > div:first-child {
+    display: none !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label {
+    gap: 0 !important;
+    min-height: 42px !important;
+    padding: .48rem .78rem !important;
+    border-radius: 999px !important;
+    flex: 0 0 auto !important;
+    box-sizing: border-box !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label > div {
+    gap: 0 !important;
+    min-width: 0 !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label p,
+[data-testid="stRadio"] [role="radiogroup"] > label span,
+[data-testid="stRadio"] [role="radiogroup"] > label div {
+    white-space: nowrap !important;
+}
+.ff-page-heading {
+    position: relative;
+    z-index: 1;
+    scroll-margin-top: 1.25rem;
+}
+.ff-page-heading__eyebrow {
+    display: block;
+    margin-top: .15rem;
+}
+@media (max-width: 850px) {
+    [data-testid="stHorizontalBlock"]:has([data-testid="stRadio"]) {
+        padding: .3rem !important;
+        margin-bottom: .8rem !important;
+        border-radius: 14px !important;
+    }
+    [data-testid="stRadio"] [role="radiogroup"] > label {
+        padding: .45rem .6rem !important;
+    }
+}

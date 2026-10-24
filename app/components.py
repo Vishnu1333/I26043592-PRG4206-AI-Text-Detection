@@ -24,269 +24,246 @@ from src.config import FIGURES_DIR, METRICS_DIR
 # ── Header & Banner ──────────────────────────────────────────────────────────
 
 def render_header():
-    """Render the FinMind-inspired glassmorphism hero and shared visual system."""
+    """Render a restrained Apple-inspired hero and global light design system."""
     st.markdown(
         """
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
         :root {
-            --fm-bg: #070d19;
-            --fm-panel: rgba(18, 29, 49, 0.78);
-            --fm-panel-strong: #111d32;
-            --fm-border: rgba(148, 169, 207, 0.17);
-            --fm-text: #eaf0fc;
-            --fm-muted: #9caecc;
-            --fm-blue: #7797ff;
-            --fm-cyan: #4cd6e8;
-            --fm-green: #4adead;
+            --apple-blue: #0071e3;
+            --apple-ink: #1d1d1f;
+            --apple-muted: #6e6e73;
+            --apple-bg: #ffffff;
+            --apple-panel: #f5f5f7;
+            --apple-line: #d2d2d7;
         }
         html, body, [class*="css"] {
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
         .stApp {
-            background:
-                radial-gradient(ellipse at 8% 0%, rgba(55, 91, 190, 0.20), transparent 35%),
-                radial-gradient(ellipse at 100% 12%, rgba(30, 174, 194, 0.10), transparent 29%),
-                linear-gradient(160deg, #080f1d 0%, #091321 50%, #070d19 100%);
-            color: var(--fm-text);
+            background: #ffffff;
+            color: var(--apple-ink);
         }
         [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
-            background: transparent;
+            background: #ffffff;
         }
-        [data-testid="stHeader"] { border-bottom: 1px solid rgba(148,169,207,0.08); }
+        [data-testid="stHeader"] {
+            background: rgba(255,255,255,0.86);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
         .main .block-container {
-            max-width: 1460px;
-            padding-top: 1.55rem;
-            padding-bottom: 3.4rem;
+            max-width: 1240px;
+            padding-top: 1.1rem;
+            padding-bottom: 4rem;
         }
-        [data-testid="stSidebar"] {
-            background: linear-gradient(180deg, #0e192b 0%, #091321 54%, #080f1d 100%);
-            border-right: 1px solid var(--fm-border);
-        }
-        [data-testid="stSidebar"] > div:first-child {
-            background: transparent;
-        }
-        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
-        [data-testid="stSidebar"] label,
-        [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
-            color: #bdcbe2;
-        }
-        [data-testid="stSidebar"] hr {
-            border-color: rgba(148,169,207,0.15);
-            margin: 1rem 0;
-        }
-        [data-testid="stSidebar"] [role="radiogroup"] {
-            gap: 0.42rem;
-        }
-        [data-testid="stSidebar"] [role="radio"] {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid transparent;
-            border-radius: 11px;
-            padding: 0.55rem 0.65rem;
-            transition: background 160ms ease, border-color 160ms ease;
-        }
-        [data-testid="stSidebar"] [role="radio"]:hover {
-            background: rgba(119,151,255,0.10);
-            border-color: rgba(119,151,255,0.25);
-        }
-        [data-testid="stSidebar"] [role="radio"] p { color: #e5edfc; }
+        [data-testid="stSidebar"] { display: none; }
+        [data-testid="stSidebarCollapsedControl"] { display: none; }
         h1, h2, h3, h4 {
-            color: #f1f5ff;
-            letter-spacing: -0.025em;
+            color: var(--apple-ink);
+            letter-spacing: -0.035em;
+            font-weight: 650;
         }
-        h2, h3 { font-weight: 750; }
+        h2 { font-size: clamp(1.75rem, 3vw, 2.3rem); }
+        h3 { font-size: clamp(1.35rem, 2vw, 1.75rem); }
         [data-testid="stMarkdownContainer"] p,
         [data-testid="stMarkdownContainer"] li {
-            color: #c2cde0;
-            line-height: 1.68;
+            color: #424245;
+            line-height: 1.58;
         }
         [data-testid="stCaptionContainer"] {
-            color: var(--fm-muted);
+            color: var(--apple-muted);
+            font-size: 0.83rem;
         }
         [data-testid="stMetric"] {
-            background: linear-gradient(145deg, rgba(24,39,64,0.90), rgba(13,24,41,0.88));
-            border: 1px solid var(--fm-border);
-            padding: 1rem 1.05rem;
-            border-radius: 16px;
-            box-shadow: 0 12px 34px rgba(0,0,0,0.13);
+            background: #f5f5f7;
+            border: 1px solid rgba(0,0,0,0.035);
+            border-radius: 18px;
+            padding: 1rem 1.1rem;
+            box-shadow: none;
         }
-        [data-testid="stMetricLabel"] { color: #9fb0ce; }
-        [data-testid="stMetricValue"] { color: #f3f7ff; font-weight: 760; }
-        [data-testid="stMetricDelta"] { font-weight: 600; }
-        div[data-testid="stVerticalBlockBorderWrapper"] {
-            border-color: var(--fm-border);
-            border-radius: 16px;
+        [data-testid="stMetricLabel"] { color: #6e6e73; }
+        [data-testid="stMetricValue"] {
+            color: #1d1d1f;
+            font-weight: 650;
+            letter-spacing: -0.035em;
         }
+        [data-testid="stMetricDelta"] { font-weight: 550; }
         .stButton > button, [data-testid="stDownloadButton"] button {
-            border-radius: 11px;
-            min-height: 2.7rem;
-            border: 1px solid rgba(119,151,255,0.38);
-            background: linear-gradient(135deg, #4268e9, #557ff5);
-            color: #fff;
-            font-weight: 700;
-            box-shadow: 0 7px 20px rgba(48,91,220,0.19);
-            transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+            min-height: 2.55rem;
+            border-radius: 999px;
+            border: 1px solid var(--apple-blue);
+            background: var(--apple-blue);
+            color: #ffffff;
+            font-weight: 500;
+            padding: 0.35rem 1.15rem;
+            box-shadow: none;
+            transition: background 150ms ease, transform 150ms ease;
         }
         .stButton > button:hover, [data-testid="stDownloadButton"] button:hover {
-            border-color: rgba(76,214,232,0.75);
-            filter: brightness(1.08);
+            background: #0077ed;
+            border-color: #0077ed;
+            color: #ffffff;
             transform: translateY(-1px);
-            box-shadow: 0 10px 26px rgba(48,91,220,0.28);
-            color: #fff;
         }
-        .stButton > button:focus { box-shadow: 0 0 0 3px rgba(119,151,255,0.22); }
+        .stButton > button:focus { box-shadow: 0 0 0 3px rgba(0,113,227,.18); }
         [data-baseweb="select"] > div,
         [data-baseweb="input"] > div,
         [data-baseweb="textarea"] > div {
-            background: rgba(13,24,42,0.88);
-            border-color: rgba(148,169,207,0.23);
-            border-radius: 11px;
-            color: #eaf0fc;
+            background: #ffffff;
+            border-color: #d2d2d7;
+            border-radius: 12px;
+            color: #1d1d1f;
+            box-shadow: none;
+        }
+        [data-baseweb="select"]:focus-within > div,
+        [data-baseweb="input"]:focus-within > div,
+        [data-baseweb="textarea"]:focus-within > div {
+            border-color: #0071e3;
+            box-shadow: 0 0 0 3px rgba(0,113,227,.12);
         }
         [data-baseweb="select"] input,
         [data-baseweb="input"] input,
-        [data-baseweb="textarea"] textarea {
-            color: #eef4ff;
-        }
-        [data-baseweb="select"] svg { fill: #a9bcda; }
+        [data-baseweb="textarea"] textarea { color: #1d1d1f; }
         [data-testid="stFileUploader"] {
-            background: rgba(17,29,49,0.65);
-            border: 1px dashed rgba(119,151,255,0.40);
-            border-radius: 15px;
-            padding: 0.45rem;
+            background: #f5f5f7;
+            border: 1px dashed #c7c7cc;
+            border-radius: 16px;
+            padding: 0.55rem;
         }
-        [data-testid="stFileUploader"] section {
-            background: transparent;
-            border: 0;
-        }
+        [data-testid="stFileUploader"] section { background: transparent; border: 0; }
         [data-baseweb="tab-list"] {
-            gap: 0.35rem;
-            border-bottom: 1px solid var(--fm-border);
+            gap: 1.15rem;
+            border-bottom: 1px solid #d2d2d7;
         }
         [data-baseweb="tab"] {
-            background: rgba(255,255,255,0.025);
-            border: 1px solid transparent;
-            border-radius: 10px 10px 0 0;
-            padding: 0.65rem 1rem;
+            background: transparent;
+            border: 0;
+            border-radius: 0;
+            padding: 0.65rem 0.2rem;
+            color: #6e6e73;
         }
         [data-baseweb="tab"][aria-selected="true"] {
-            background: rgba(119,151,255,0.13);
-            border-color: rgba(119,151,255,0.27);
+            background: transparent;
+            border-bottom: 2px solid #0071e3;
+            color: #1d1d1f;
         }
         [data-testid="stExpander"] {
-            background: rgba(16,28,47,0.72);
-            border: 1px solid var(--fm-border);
-            border-radius: 13px;
+            background: #f5f5f7;
+            border: 1px solid rgba(0,0,0,0.035);
+            border-radius: 14px;
         }
         [data-testid="stDataFrame"], [data-testid="stTable"] {
-            border: 1px solid var(--fm-border);
+            border: 1px solid #e5e5ea;
             border-radius: 12px;
             overflow: hidden;
         }
         [data-testid="stAlert"] { border-radius: 12px; }
-        [data-testid="stProgress"] > div {
-            background: rgba(148,169,207,0.16);
-            border-radius: 99px;
+        hr { border-color: #e5e5ea; }
+        a { color: #0066cc !important; }
+        [data-testid="stRadio"] [role="radiogroup"] {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.2rem;
         }
-        [data-testid="stProgress"] > div > div {
-            background: linear-gradient(90deg, #587cf5, #4cd6e8);
-            border-radius: 99px;
+        [data-testid="stRadio"] label {
+            border-radius: 999px;
+            padding: 0.38rem 0.72rem;
+            border: 1px solid transparent;
         }
-        hr { border-color: rgba(148,169,207,0.14); }
-        a { color: #8fb4ff !important; }
-        .prg-hero {
-            padding: 1.8rem 2rem 1.55rem 2rem;
-            border-radius: 22px;
-            margin: 0.1rem 0 1.4rem 0;
-            background:
-                radial-gradient(ellipse at 92% 0%, rgba(76,214,232,0.19), transparent 30%),
-                linear-gradient(120deg, rgba(20,34,65,0.98) 0%, rgba(27,56,121,0.96) 58%, rgba(13,79,104,0.94) 100%);
-            border: 1px solid rgba(146,174,255,0.28);
-            box-shadow: 0 18px 45px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
-            color: #ffffff;
-            position: relative;
-            overflow: hidden;
+        [data-testid="stRadio"] label p {
+            color: #424245 !important;
+            font-size: 0.84rem;
         }
-        .prg-hero:after {
-            content: "";
-            width: 220px;
-            height: 220px;
+        .apple-topbar {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+            color: #1d1d1f;
+            font-size: 0.8rem;
+            font-weight: 650;
+            letter-spacing: -0.01em;
+            line-height: 1.25;
+            padding: 0.6rem 0.1rem;
+        }
+        .apple-brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.11);
-            position: absolute;
-            right: -82px;
-            top: -112px;
-            box-shadow: 0 0 0 24px rgba(255,255,255,0.025), 0 0 0 48px rgba(255,255,255,0.02);
-            pointer-events: none;
-        }
-        .prg-hero .eyebrow {
-            margin: 0 0 0.65rem 0;
-            color: #b8d9ff;
-            font-size: 0.72rem;
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-        .prg-hero h1 {
-            color: #ffffff !important;
-            font-size: clamp(1.8rem, 3.4vw, 2.7rem);
-            font-weight: 800;
-            line-height: 1.1;
-            margin: 0 0 0.65rem 0;
+            background: #1d1d1f;
+            color: #fff;
+            font-size: 0.68rem;
+            font-weight: 700;
             letter-spacing: -0.04em;
         }
-        .prg-hero .lead {
-            color: #e2ecff;
-            font-size: 1rem;
-            line-height: 1.65;
-            max-width: 880px;
-            margin: 0 0 1.15rem 0;
-        }
-        .prg-hero .pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        .prg-hero .pill {
-            display: inline-block;
-            color: #f3f7ff;
-            background: rgba(255,255,255,0.085);
-            border: 1px solid rgba(255,255,255,0.18);
-            border-radius: 999px;
-            padding: 0.4rem 0.78rem;
-            font-size: 0.77rem;
+        .apple-eyebrow {
+            color: #6e6e73;
+            font-size: 0.74rem;
             font-weight: 650;
-            backdrop-filter: blur(10px);
-        }
-        .prg-section-label {
-            color: #8fb4ff;
-            font-size: 0.76rem;
-            letter-spacing: 0.13em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            font-weight: 800;
+            margin-bottom: 0.85rem;
+        }
+        .apple-hero {
+            background: #f5f5f7;
+            border-radius: 22px;
+            padding: clamp(2rem, 5vw, 4rem) 1.4rem 2.4rem;
+            text-align: center;
+            margin: 0.35rem 0 1.5rem;
+        }
+        .apple-hero h1 {
+            max-width: 900px;
+            margin: 0 auto 0.9rem;
+            color: #1d1d1f !important;
+            font-size: clamp(2.3rem, 5.8vw, 4.35rem);
+            line-height: 1.04;
+            letter-spacing: -0.06em;
+            font-weight: 700;
+        }
+        .apple-hero .apple-subtitle {
+            max-width: 680px;
+            margin: 0 auto 1.15rem;
+            color: #424245;
+            font-size: clamp(1.02rem, 2.1vw, 1.35rem);
+            line-height: 1.42;
+            letter-spacing: -0.015em;
+        }
+        .apple-hero .apple-detail {
+            color: #6e6e73;
+            font-size: 0.86rem;
+            margin-top: 1.25rem;
+        }
+        .apple-section-label {
+            color: #6e6e73;
+            font-size: 0.73rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 650;
             margin-bottom: 0.35rem;
         }
-        @media (max-width: 680px) {
-            .main .block-container { padding-top: 1rem; }
-            .prg-hero { padding: 1.2rem; border-radius: 16px; }
-            .prg-hero .lead { font-size: 0.93rem; }
+        .apple-link {
+            color: #0066cc;
+            font-size: 0.96rem;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        @media (max-width: 740px) {
+            .main .block-container { padding-top: 0.6rem; }
+            .apple-hero { border-radius: 16px; padding: 2rem 1rem; }
+            .apple-hero h1 { font-size: clamp(2rem, 9vw, 3rem); }
         }
         </style>
-        <section class="prg-hero">
-          <div class="eyebrow">PRG4206 · MACHINE LEARNING RESEARCH PROTOTYPE</div>
-          <h1>AI-Generated Text Detection</h1>
-          <p class="lead">
-            A transparent workspace for comparing text-detection models, testing passages,
-            exploring writing-style signals, and reviewing the benchmark evidence.
+        <div class="apple-hero">
+          <div class="apple-eyebrow">PRG4206 · Machine Learning Project</div>
+          <h1>A clearer look at AI-generated text.</h1>
+          <p class="apple-subtitle">
+            Compare three machine-learning models, explore the signals behind their predictions,
+            and see how the evidence holds up.
           </p>
-          <div class="pills">
-            <span class="pill">HC3 · 79,331 cleaned samples</span>
-            <span class="pill">3 evaluated models</span>
-            <span class="pill">Linear SVM · 98.61% accuracy</span>
-            <span class="pill">Model insights · Domain analysis</span>
-          </div>
-        </section>
+          <div class="apple-detail">HC3 benchmark · 79,331 cleaned samples · 3 evaluated models</div>
+        </div>
         """,
         unsafe_allow_html=True,
     )

@@ -124,8 +124,8 @@ def render_login_screen():
     with col_form:
         st.markdown(
             """
-            <div class="ff-lime-card ff-login-panel ff-animate-in ff-delay-3" style="margin-bottom:1rem;">
-              <div class="ff-mini" style="color:#313a1b;">WELCOME BACK</div>
+            <div class="ff-login-welcome ff-login-panel ff-animate-in ff-delay-3" style="margin-bottom:1rem;">
+              <div class="ff-mini">WELCOME BACK</div>
               <h3 style="font-size:2rem;line-height:1.05;margin:.55rem 0 .45rem;">Your workspace,<br>ready when you are.</h3>
               <p style="margin:0;">Sign in to continue to the detection dashboard.</p>
             </div>

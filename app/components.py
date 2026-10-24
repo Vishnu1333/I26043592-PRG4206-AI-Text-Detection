@@ -24,73 +24,267 @@ from src.config import FIGURES_DIR, METRICS_DIR
 # ── Header & Banner ──────────────────────────────────────────────────────────
 
 def render_header():
-    """Render a modern, responsive hero header for the research dashboard."""
+    """Render the FinMind-inspired glassmorphism hero and shared visual system."""
     st.markdown(
         """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        :root {
+            --fm-bg: #070d19;
+            --fm-panel: rgba(18, 29, 49, 0.78);
+            --fm-panel-strong: #111d32;
+            --fm-border: rgba(148, 169, 207, 0.17);
+            --fm-text: #eaf0fc;
+            --fm-muted: #9caecc;
+            --fm-blue: #7797ff;
+            --fm-cyan: #4cd6e8;
+            --fm-green: #4adead;
+        }
+        html, body, [class*="css"] {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .stApp {
+            background:
+                radial-gradient(ellipse at 8% 0%, rgba(55, 91, 190, 0.20), transparent 35%),
+                radial-gradient(ellipse at 100% 12%, rgba(30, 174, 194, 0.10), transparent 29%),
+                linear-gradient(160deg, #080f1d 0%, #091321 50%, #070d19 100%);
+            color: var(--fm-text);
+        }
+        [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+            background: transparent;
+        }
+        [data-testid="stHeader"] { border-bottom: 1px solid rgba(148,169,207,0.08); }
+        .main .block-container {
+            max-width: 1460px;
+            padding-top: 1.55rem;
+            padding-bottom: 3.4rem;
+        }
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, #0e192b 0%, #091321 54%, #080f1d 100%);
+            border-right: 1px solid var(--fm-border);
+        }
+        [data-testid="stSidebar"] > div:first-child {
+            background: transparent;
+        }
+        [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+        [data-testid="stSidebar"] label,
+        [data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+            color: #bdcbe2;
+        }
+        [data-testid="stSidebar"] hr {
+            border-color: rgba(148,169,207,0.15);
+            margin: 1rem 0;
+        }
+        [data-testid="stSidebar"] [role="radiogroup"] {
+            gap: 0.42rem;
+        }
+        [data-testid="stSidebar"] [role="radio"] {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid transparent;
+            border-radius: 11px;
+            padding: 0.55rem 0.65rem;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+        [data-testid="stSidebar"] [role="radio"]:hover {
+            background: rgba(119,151,255,0.10);
+            border-color: rgba(119,151,255,0.25);
+        }
+        [data-testid="stSidebar"] [role="radio"] p { color: #e5edfc; }
+        h1, h2, h3, h4 {
+            color: #f1f5ff;
+            letter-spacing: -0.025em;
+        }
+        h2, h3 { font-weight: 750; }
+        [data-testid="stMarkdownContainer"] p,
+        [data-testid="stMarkdownContainer"] li {
+            color: #c2cde0;
+            line-height: 1.68;
+        }
+        [data-testid="stCaptionContainer"] {
+            color: var(--fm-muted);
+        }
+        [data-testid="stMetric"] {
+            background: linear-gradient(145deg, rgba(24,39,64,0.90), rgba(13,24,41,0.88));
+            border: 1px solid var(--fm-border);
+            padding: 1rem 1.05rem;
+            border-radius: 16px;
+            box-shadow: 0 12px 34px rgba(0,0,0,0.13);
+        }
+        [data-testid="stMetricLabel"] { color: #9fb0ce; }
+        [data-testid="stMetricValue"] { color: #f3f7ff; font-weight: 760; }
+        [data-testid="stMetricDelta"] { font-weight: 600; }
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            border-color: var(--fm-border);
+            border-radius: 16px;
+        }
+        .stButton > button, [data-testid="stDownloadButton"] button {
+            border-radius: 11px;
+            min-height: 2.7rem;
+            border: 1px solid rgba(119,151,255,0.38);
+            background: linear-gradient(135deg, #4268e9, #557ff5);
+            color: #fff;
+            font-weight: 700;
+            box-shadow: 0 7px 20px rgba(48,91,220,0.19);
+            transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+        }
+        .stButton > button:hover, [data-testid="stDownloadButton"] button:hover {
+            border-color: rgba(76,214,232,0.75);
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(48,91,220,0.28);
+            color: #fff;
+        }
+        .stButton > button:focus { box-shadow: 0 0 0 3px rgba(119,151,255,0.22); }
+        [data-baseweb="select"] > div,
+        [data-baseweb="input"] > div,
+        [data-baseweb="textarea"] > div {
+            background: rgba(13,24,42,0.88);
+            border-color: rgba(148,169,207,0.23);
+            border-radius: 11px;
+            color: #eaf0fc;
+        }
+        [data-baseweb="select"] input,
+        [data-baseweb="input"] input,
+        [data-baseweb="textarea"] textarea {
+            color: #eef4ff;
+        }
+        [data-baseweb="select"] svg { fill: #a9bcda; }
+        [data-testid="stFileUploader"] {
+            background: rgba(17,29,49,0.65);
+            border: 1px dashed rgba(119,151,255,0.40);
+            border-radius: 15px;
+            padding: 0.45rem;
+        }
+        [data-testid="stFileUploader"] section {
+            background: transparent;
+            border: 0;
+        }
+        [data-baseweb="tab-list"] {
+            gap: 0.35rem;
+            border-bottom: 1px solid var(--fm-border);
+        }
+        [data-baseweb="tab"] {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid transparent;
+            border-radius: 10px 10px 0 0;
+            padding: 0.65rem 1rem;
+        }
+        [data-baseweb="tab"][aria-selected="true"] {
+            background: rgba(119,151,255,0.13);
+            border-color: rgba(119,151,255,0.27);
+        }
+        [data-testid="stExpander"] {
+            background: rgba(16,28,47,0.72);
+            border: 1px solid var(--fm-border);
+            border-radius: 13px;
+        }
+        [data-testid="stDataFrame"], [data-testid="stTable"] {
+            border: 1px solid var(--fm-border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        [data-testid="stAlert"] { border-radius: 12px; }
+        [data-testid="stProgress"] > div {
+            background: rgba(148,169,207,0.16);
+            border-radius: 99px;
+        }
+        [data-testid="stProgress"] > div > div {
+            background: linear-gradient(90deg, #587cf5, #4cd6e8);
+            border-radius: 99px;
+        }
+        hr { border-color: rgba(148,169,207,0.14); }
+        a { color: #8fb4ff !important; }
         .prg-hero {
-            padding: 1.7rem 1.9rem 1.45rem 1.9rem;
-            border-radius: 20px;
-            margin: 0.1rem 0 1.15rem 0;
-            background: linear-gradient(120deg, #10224b 0%, #1d4ed8 67%, #0786b8 100%);
-            box-shadow: 0 10px 28px rgba(20, 42, 92, 0.16);
+            padding: 1.8rem 2rem 1.55rem 2rem;
+            border-radius: 22px;
+            margin: 0.1rem 0 1.4rem 0;
+            background:
+                radial-gradient(ellipse at 92% 0%, rgba(76,214,232,0.19), transparent 30%),
+                linear-gradient(120deg, rgba(20,34,65,0.98) 0%, rgba(27,56,121,0.96) 58%, rgba(13,79,104,0.94) 100%);
+            border: 1px solid rgba(146,174,255,0.28);
+            box-shadow: 0 18px 45px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.06);
             color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+        .prg-hero:after {
+            content: "";
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.11);
+            position: absolute;
+            right: -82px;
+            top: -112px;
+            box-shadow: 0 0 0 24px rgba(255,255,255,0.025), 0 0 0 48px rgba(255,255,255,0.02);
+            pointer-events: none;
         }
         .prg-hero .eyebrow {
-            margin: 0 0 0.55rem 0;
-            color: #dbeafe;
-            font-size: 0.76rem;
-            font-weight: 750;
-            letter-spacing: 0.13em;
+            margin: 0 0 0.65rem 0;
+            color: #b8d9ff;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
         }
         .prg-hero h1 {
             color: #ffffff !important;
-            font-size: clamp(1.65rem, 3.2vw, 2.55rem);
+            font-size: clamp(1.8rem, 3.4vw, 2.7rem);
             font-weight: 800;
-            line-height: 1.12;
-            margin: 0 0 0.55rem 0;
-            letter-spacing: -0.025em;
+            line-height: 1.1;
+            margin: 0 0 0.65rem 0;
+            letter-spacing: -0.04em;
         }
         .prg-hero .lead {
-            color: #eff6ff;
+            color: #e2ecff;
             font-size: 1rem;
-            line-height: 1.55;
+            line-height: 1.65;
             max-width: 880px;
-            margin: 0 0 1.05rem 0;
+            margin: 0 0 1.15rem 0;
         }
         .prg-hero .pills {
             display: flex;
             flex-wrap: wrap;
-            gap: 0.48rem;
+            gap: 0.5rem;
         }
         .prg-hero .pill {
             display: inline-block;
-            color: #ffffff;
-            background: rgba(255,255,255,0.13);
-            border: 1px solid rgba(255,255,255,0.25);
+            color: #f3f7ff;
+            background: rgba(255,255,255,0.085);
+            border: 1px solid rgba(255,255,255,0.18);
             border-radius: 999px;
-            padding: 0.36rem 0.72rem;
-            font-size: 0.78rem;
+            padding: 0.4rem 0.78rem;
+            font-size: 0.77rem;
             font-weight: 650;
+            backdrop-filter: blur(10px);
+        }
+        .prg-section-label {
+            color: #8fb4ff;
+            font-size: 0.76rem;
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 0.35rem;
         }
         @media (max-width: 680px) {
-            .prg-hero { padding: 1.2rem; border-radius: 15px; }
+            .main .block-container { padding-top: 1rem; }
+            .prg-hero { padding: 1.2rem; border-radius: 16px; }
             .prg-hero .lead { font-size: 0.93rem; }
         }
         </style>
         <section class="prg-hero">
-          <div class="eyebrow">PRG4206 · Machine Learning Research Prototype</div>
+          <div class="eyebrow">PRG4206 · MACHINE LEARNING RESEARCH PROTOTYPE</div>
           <h1>AI-Generated Text Detection</h1>
           <p class="lead">
-            Explore a transparent comparison of three machine-learning models.
-            Test text, inspect writing-style signals, and review the evidence behind the benchmark results.
+            A transparent workspace for comparing text-detection models, testing passages,
+            exploring writing-style signals, and reviewing the benchmark evidence.
           </p>
           <div class="pills">
             <span class="pill">HC3 · 79,331 cleaned samples</span>
             <span class="pill">3 evaluated models</span>
-            <span class="pill">SVM · 98.61% accuracy</span>
-            <span class="pill">SHAP · LIME · Domain analysis</span>
+            <span class="pill">Linear SVM · 98.61% accuracy</span>
+            <span class="pill">Model insights · Domain analysis</span>
           </div>
         </section>
         """,

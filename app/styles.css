@@ -957,3 +957,115 @@ body { text-rendering: optimizeLegibility; }
         transition: none !important;
     }
 }
+
+
+/* Login refinement: make the welcome panel and form calm, readable, and high contrast. */
+.ff-login-welcome {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(177,221,64,.105), rgba(27,34,16,.97) 58%) !important;
+    color: var(--ff-text) !important;
+    border: 1px solid rgba(177,221,64,.30) !important;
+    border-radius: 22px !important;
+    padding: 1.45rem 1.5rem 1.35rem !important;
+    box-shadow: 0 16px 42px rgba(0,0,0,.18);
+}
+.ff-login-welcome::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 10rem;
+    height: 10rem;
+    top: -5.2rem;
+    right: -2.8rem;
+    border: 1px solid rgba(177,221,64,.20);
+    border-radius: 50%;
+    box-shadow: 0 0 0 18px rgba(177,221,64,.025), 0 0 0 38px rgba(177,221,64,.018);
+    pointer-events: none;
+}
+.ff-login-welcome .ff-mini { color: var(--ff-lime) !important; }
+.ff-login-welcome h3 {
+    max-width: 28rem;
+    color: var(--ff-text) !important;
+    font-size: clamp(1.55rem, 2.7vw, 2rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -.045em !important;
+    margin: .65rem 0 .65rem !important;
+}
+.ff-login-welcome p {
+    max-width: 34rem;
+    color: var(--ff-text-soft) !important;
+    font-size: .96rem;
+    line-height: 1.6;
+    margin: 0 !important;
+}
+
+/* Login form: dark glass panel, readable fields, a single lime action. */
+[data-testid="stForm"] {
+    background: linear-gradient(150deg, #1b2210, #151b0a) !important;
+    border: 1px solid rgba(226,239,197,.15) !important;
+    border-radius: 22px !important;
+    padding: 1.25rem 1.25rem 1rem !important;
+    box-shadow: 0 16px 42px rgba(0,0,0,.16);
+}
+[data-testid="stForm"] label,
+[data-testid="stForm"] label p,
+[data-testid="stForm"] [data-testid="stWidgetLabel"] {
+    color: #e7eddd !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] > div {
+    min-height: 3.2rem;
+    background: #111606 !important;
+    border: 1px solid #465332 !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+}
+[data-testid="stForm"] [data-baseweb="input"]:hover > div {
+    border-color: rgba(177,221,64,.62) !important;
+}
+[data-testid="stForm"] input {
+    color: #eff2e7 !important;
+    -webkit-text-fill-color: #eff2e7 !important;
+    caret-color: var(--ff-lime) !important;
+}
+[data-testid="stForm"] input::placeholder {
+    color: #899578 !important;
+    -webkit-text-fill-color: #899578 !important;
+    opacity: 1 !important;
+}
+[data-testid="stForm"] button,
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] button {
+    min-height: 3.05rem !important;
+    background: var(--ff-lime) !important;
+    border: 1px solid var(--ff-lime) !important;
+    border-radius: 999px !important;
+    color: var(--ff-ink) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 22px rgba(177,221,64,.12);
+}
+[data-testid="stForm"] button:hover {
+    background: var(--ff-lime-bright) !important;
+    border-color: var(--ff-lime-bright) !important;
+    color: var(--ff-ink) !important;
+    transform: translateY(-1px);
+}
+
+/* Keep demo access visually related, but ensure its label is never washed out. */
+[data-testid="stButton"] button {
+    min-height: 3rem;
+    background: var(--ff-lime) !important;
+    border: 1px solid var(--ff-lime) !important;
+    border-radius: 999px !important;
+    color: var(--ff-ink) !important;
+    font-weight: 700 !important;
+}
+[data-testid="stButton"] button:hover {
+    background: var(--ff-lime-bright) !important;
+    border-color: var(--ff-lime-bright) !important;
+    color: var(--ff-ink) !important;
+}
+@media (max-width: 767px) {
+    .ff-login-welcome { padding: 1.15rem !important; border-radius: 18px !important; }
+    [data-testid="stForm"] { padding: 1rem !important; border-radius: 18px !important; }
+}

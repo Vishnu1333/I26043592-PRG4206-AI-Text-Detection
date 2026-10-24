@@ -272,42 +272,40 @@ def render_header():
 # ── Prediction Result Display ────────────────────────────────────────────────
 
 def render_prediction_result(result: Dict[str, Any]):
-    """Render a high-contrast glass card for the model's actual prediction."""
+    """Render a restrained Apple-inspired result panel using the actual prediction."""
     label = result.get("label", "Unknown")
     confidence = float(result.get("confidence", 0.0))
     model = result.get("model", "Unknown")
-
     is_ai = label == "AI-Generated"
-    bg_color = "linear-gradient(145deg, rgba(71,31,51,.92), rgba(27,20,38,.96))" if is_ai else "linear-gradient(145deg, rgba(17,58,61,.92), rgba(15,31,43,.96))"
-    border_color = "rgba(251,113,133,.60)" if is_ai else "rgba(74,222,173,.54)"
-    text_color = "#fda4af" if is_ai else "#6ee7b7"
-    icon = "✦" if is_ai else "◎"
+    accent = "#b42318" if is_ai else "#087443"
+    soft_bg = "#fff5f5" if is_ai else "#f0faf5"
+    soft_border = "#f3c5c5" if is_ai else "#bfe8d2"
+    icon = "✦" if is_ai else "✓"
     ai_prob = confidence if is_ai else (1.0 - confidence)
     human_prob = 1.0 - ai_prob
 
     st.markdown(
         f"""
-        <div style="background:{bg_color};border:1px solid {border_color};border-radius:18px;
-                    padding:23px 26px;margin:18px 0 20px 0;
-                    box-shadow:0 16px 36px rgba(0,0,0,.18);">
+        <div style="background:{soft_bg};border:1px solid {soft_border};border-radius:18px;
+                    padding:22px 25px;margin:18px 0 20px 0;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
             <div>
-              <div style="font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:{text_color};">
+              <div style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:650;color:{accent};">
                 Model assessment
               </div>
-              <div style="color:#f5f7ff;font-size:clamp(1.55rem,3vw,2.1rem);font-weight:800;letter-spacing:-.035em;margin:7px 0 5px;">
+              <div style="color:#1d1d1f;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;letter-spacing:-.04em;margin:7px 0 5px;">
                 {icon} {label}
               </div>
-              <div style="font-size:.86rem;color:#b5c4da;">Evaluated by <b style="color:#eaf0fc;">{model}</b></div>
+              <div style="font-size:.86rem;color:#6e6e73;">Evaluated by <b style="color:#1d1d1f;">{model}</b></div>
             </div>
-            <div style="text-align:left;min-width:130px;background:rgba(255,255,255,.045);
-                        border:1px solid rgba(255,255,255,.11);border-radius:14px;padding:12px 16px;">
-              <div style="font-size:.72rem;color:#b5c4da;margin-bottom:4px;">Model confidence</div>
-              <div style="font-size:2.05rem;line-height:1.2;font-weight:800;color:{text_color};">{confidence * 100:.1f}%</div>
+            <div style="text-align:left;min-width:135px;background:rgba(255,255,255,.82);
+                        border:1px solid rgba(0,0,0,.055);border-radius:14px;padding:12px 16px;">
+              <div style="font-size:.72rem;color:#6e6e73;margin-bottom:4px;">Model confidence</div>
+              <div style="font-size:2rem;line-height:1.2;font-weight:700;color:{accent};">{confidence * 100:.1f}%</div>
             </div>
           </div>
-          <div style="margin-top:15px;font-size:.78rem;color:#c2cde0;line-height:1.6;">
-            This label reflects the model's learned patterns in HC3. It is not proof of authorship.
+          <div style="margin-top:14px;font-size:.79rem;color:#6e6e73;line-height:1.6;">
+            This label reflects learned patterns in HC3. It is not proof of authorship.
           </div>
         </div>
         """,

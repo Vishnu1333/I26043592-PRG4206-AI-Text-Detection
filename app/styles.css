@@ -1448,3 +1448,102 @@ body { text-rendering: optimizeLegibility; }
         font-size: .68rem !important;
     }
 }
+
+
+/* Reliable dashboard navigation: full-width labels with an obvious selected state. */
+/* Header is deliberately two rows: brand/model/actions first, six navigation options beneath. */
+[data-testid="stHeader"] {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) {
+    position: relative !important;
+    top: auto !important;
+    z-index: 2 !important;
+    padding: .2rem 0 .35rem !important;
+    margin: 0 0 .4rem !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="column"] {
+    min-width: 0 !important;
+    align-self: center !important;
+}
+/* Unselected buttons are dark, quiet pills; selected button uses Streamlit's primary type. */
+[data-testid="stButton"] button[kind="secondary"],
+[data-testid="stButton"] button[data-testid="baseButton-secondary"] {
+    min-height: 42px !important;
+    width: 100% !important;
+    padding: .5rem .42rem !important;
+    border: 1px solid rgba(226,239,197,.16) !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.025) !important;
+    color: #d7dfc8 !important;
+    box-shadow: none !important;
+    font-size: .82rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    transform: none !important;
+}
+[data-testid="stButton"] button[kind="secondary"]:hover,
+[data-testid="stButton"] button[data-testid="baseButton-secondary"]:hover {
+    border-color: rgba(177,221,64,.5) !important;
+    background: rgba(177,221,64,.09) !important;
+    color: var(--ff-lime-bright) !important;
+    box-shadow: none !important;
+    transform: translateY(-1px) !important;
+}
+[data-testid="stButton"] button[kind="primary"],
+[data-testid="stButton"] button[data-testid="baseButton-primary"] {
+    min-height: 42px !important;
+    width: 100% !important;
+    padding: .5rem .42rem !important;
+    border: 1px solid var(--ff-lime) !important;
+    border-radius: 999px !important;
+    background: var(--ff-lime) !important;
+    color: var(--ff-ink) !important;
+    box-shadow: 0 6px 18px rgba(177,221,64,.12) !important;
+    font-size: .82rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    transform: none !important;
+}
+[data-testid="stButton"] button[kind="primary"]:hover,
+[data-testid="stButton"] button[data-testid="baseButton-primary"]:hover {
+    border-color: var(--ff-lime-bright) !important;
+    background: var(--ff-lime-bright) !important;
+    color: var(--ff-ink) !important;
+    transform: translateY(-1px) !important;
+}
+[data-testid="stButton"] button p {
+    margin: 0 !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    white-space: nowrap !important;
+}
+@media (max-width: 1100px) {
+    [data-testid="stButton"] button[kind="secondary"],
+    [data-testid="stButton"] button[data-testid="baseButton-secondary"],
+    [data-testid="stButton"] button[kind="primary"],
+    [data-testid="stButton"] button[data-testid="baseButton-primary"] {
+        font-size: .74rem !important;
+        padding: .45rem .22rem !important;
+    }
+}
+@media (max-width: 767px) {
+    [data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) {
+        gap: .45rem !important;
+    }
+    [data-testid="stButton"] button[kind="secondary"],
+    [data-testid="stButton"] button[data-testid="baseButton-secondary"],
+    [data-testid="stButton"] button[kind="primary"],
+    [data-testid="stButton"] button[data-testid="baseButton-primary"] {
+        min-height: 38px !important;
+        font-size: .68rem !important;
+        white-space: normal !important;
+    }
+}

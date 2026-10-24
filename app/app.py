@@ -189,15 +189,28 @@ def render_sidebar():
         )
 
     nav_options = ["Overview", "Detect", "Docs", "Results", "Explain", "About"]
+    nav_page = st.session_state.get("text_signal_navigation", "Overview")
+    if nav_page not in nav_options:
+        nav_page = "Overview"
+        st.session_state["text_signal_navigation"] = nav_page
+
+    # Use regular buttons instead of native radio controls, so navigation text
+    # and selected states remain reliable across Streamlit versions and themes.
     with nav_col:
-        nav_page = st.radio(
-            "Main navigation",
-            nav_options,
-            horizontal=True,
-            label_visibility="collapsed",
-            index=0,
-            key="text_signal_navigation",
-        )
+        nav_slots = st.columns(len(nav_options), gap="small")
+        for nav_slot, option in zip(nav_slots, nav_options):
+            with nav_slot:
+                is_current = option == nav_page
+                if st.button(
+                    option,
+                    key=f"text_signal_nav_{option.lower()}",
+                    type="primary" if is_current else "secondary",
+                    use_container_width=True,
+                ):
+                    st.session_state["text_signal_navigation"] = option
+                    st.rerun()
+
+    nav_page = st.session_state.get("text_signal_navigation", "Overview")
 
     available_models = get_available_models()
     with model_col:

@@ -223,8 +223,13 @@ def render_global_styles():
         .ff-login-copy {max-width:510px;color:#c8d0b8;font-size:1.06rem;line-height:1.7;}
         .ff-mini {font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ff-muted);}
         @keyframes ff-drift {0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+        @keyframes ff-marquee {from{transform:translateX(0)}to{transform:translateX(-50%)}}
         .ff-orbit {animation:ff-drift 7s ease-in-out infinite;float:right;color:var(--ff-lime);font-size:clamp(5rem,11vw,10rem);font-weight:400;line-height:1;opacity:.9;letter-spacing:-.1em;}
-        @media (prefers-reduced-motion: reduce) {.ff-orbit {animation:none;}}
+        .ff-marquee {overflow:hidden;border-top:1px solid var(--ff-line);border-bottom:1px solid var(--ff-line);margin:.25rem 0 1.5rem;padding:.68rem 0;background:rgba(177,221,64,.035);}
+        .ff-marquee-track {display:flex;width:max-content;animation:ff-marquee 34s linear infinite;}
+        .ff-marquee-track span {font-family:'DM Mono',monospace;color:var(--ff-lime);font-size:.69rem;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;padding-right:2.2rem;}
+        .ff-marquee:hover .ff-marquee-track {animation-play-state:paused;}
+        @media (prefers-reduced-motion: reduce) {.ff-orbit,.ff-marquee-track {animation:none;}}
         @media (max-width: 850px) {
             .main .block-container {padding-top:.6rem;}
             [data-testid="stRadio"] [role="radiogroup"] {justify-content:flex-start;overflow-x:auto;}
@@ -255,6 +260,12 @@ def render_header():
             <span class="ff-chip">79,331 cleaned HC3 samples</span>
             <span class="ff-chip">3 evaluated models</span>
             <span class="ff-chip">Human + AI text</span>
+          </div>
+        </div>
+        <div class="ff-marquee" aria-label="Project capabilities">
+          <div class="ff-marquee-track">
+            <span>Detect ✳ Compare ✳ Explain ✳ Inspect ✳ Validate ✳ Understand ✳ </span>
+            <span>Detect ✳ Compare ✳ Explain ✳ Inspect ✳ Validate ✳ Understand ✳ </span>
           </div>
         </div>
         """,

@@ -297,6 +297,74 @@ def page_dashboard_overview(selected_model: str):
         with col:
             render_feature_card(number, title, description)
 
+    st.divider()
+    render_page_heading(
+        "WHY THIS MATTERS",
+        "A score needs context.",
+        "Human writing can be formal and structured; generated writing can be short or conversational. A classifier can be wrong, so the result should be read alongside the evidence and study limitations.",
+    )
+    challenge_col, approach_col = st.columns(2, gap="large")
+    with challenge_col:
+        render_feature_card(
+            "THE CHALLENGE",
+            "Style is not authorship.",
+            "A high benchmark score does not guarantee reliable performance on unfamiliar domains, short passages, edited text, or newer language models.",
+        )
+    with approach_col:
+        render_feature_card(
+            "THE APPROACH",
+            "Compare, then explain.",
+            "Review model metrics, domain-level results, statistical tests and available text-attribution signals instead of relying on one label.",
+            accent=True,
+        )
+
+    st.divider()
+    render_page_heading(
+        "THE WORKFLOW",
+        "From passage to evidence.",
+        "The existing app connects a text sample to a saved classifier and gives you context to review the model's response.",
+    )
+    step_cols = st.columns(4, gap="small")
+    steps = [
+        ("01 / INPUT", "Add a passage", "Paste text or select one of the supplied sample passages."),
+        ("02 / MODEL", "Choose a classifier", "Use Linear SVM, Logistic Regression or XGBoost."),
+        ("03 / OUTPUT", "Read the estimate", "Review the predicted class and the model confidence value."),
+        ("04 / REVIEW", "Inspect the context", "Use feature explanations and limitations to interpret the result carefully."),
+    ]
+    for col, (number, title, description) in zip(step_cols, steps):
+        with col:
+            render_feature_card(number, title, description, accent=(number.startswith("04")))
+
+    st.divider()
+    render_page_heading(
+        "WHAT YOU CAN EXPLORE",
+        "One project. Four lenses.",
+        "These sections are backed by existing project data and workflows rather than placeholder product features.",
+    )
+    lens_cols = st.columns(4, gap="small")
+    lenses = [
+        ("01 / BENCHMARK", "Model comparison", "Compare saved test metrics across three classifiers."),
+        ("02 / GENERALIZATION", "Domain performance", "Look at how scores differ across HC3 source domains."),
+        ("03 / EXPLAINABILITY", "Feature signals", "Inspect available SHAP plots and linear-model term contributions."),
+        ("04 / DOCUMENTS", "Chunk analysis", "Upload TXT, PDF or DOCX for extraction and chunk-level estimates."),
+    ]
+    for col, (number, title, description) in zip(lens_cols, lenses):
+        with col:
+            render_feature_card(number, title, description)
+
+    st.markdown(
+        """
+        <section class="ff-callout" aria-label="Important research limitation">
+          <div class="ff-page-heading__eyebrow">A NOTE ON USE</div>
+          <h3 style="margin:.25rem 0 .65rem;">This is a research signal, not a verdict.</h3>
+          <p class="ff-page-heading__description" style="margin:0;">
+            AI-text detectors can produce false positives and false negatives. Do not use this prototype as the sole basis for academic penalties, employment decisions or other consequential judgements; independent human review is essential.
+          </p>
+        </section>
+        """,
+        unsafe_allow_html=True,
+    )
+
 
 # ── Page 1: Home / Detection (Single Text Input) ──────────────────────────────
 

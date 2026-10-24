@@ -59,8 +59,8 @@ def render_global_styles():
             padding-top: 1rem;
             padding-bottom: 3.5rem;
         }
-        [data-testid="stSidebar"] { background: #151b0a; border-right: 1px solid var(--ff-line); }
-        [data-testid="stSidebar"] * { color: var(--ff-text); }
+        [data-testid="stSidebar"] { display: none; }
+        [data-testid="stSidebarCollapsedControl"] { display: none; }
         h1, h2, h3, h4 {
             color: var(--ff-text);
             font-family: 'Space Grotesk', 'DM Sans', sans-serif;

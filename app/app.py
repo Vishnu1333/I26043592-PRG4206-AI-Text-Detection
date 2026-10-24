@@ -222,64 +222,72 @@ def render_sidebar():
 # ── Page 1: Home / Detection (Single Text Input) ──────────────────────────────
 
 def page_home_detection(selected_model: str):
-    """Render a clean Apple-inspired detection screen."""
-    st.markdown('<div class="apple-section-label">TEXT ANALYSIS</div>', unsafe_allow_html=True)
-    st.markdown("### A closer look at your text")
-    st.markdown(
-        "Choose a model, paste a passage, and review what the classifier predicts. "
-        "The result is an estimate based on the HC3 benchmark—not a determination of authorship."
+    """Render the primary detection workflow in the Flashform-inspired layout."""
+    st.markdown('<div class="ff-section-label">01 / DETECTION WORKSPACE</div>', unsafe_allow_html=True)
+    st.markdown("### Every passage has a pattern.")
+    st.write(
+        "Test a passage against the selected model, then examine the output and its strongest signals. "
+        "The classification is a research estimate—not proof of authorship."
     )
+
+    k1, k2, k3 = st.columns(3)
+    k1.metric("Active model", selected_model)
+    k2.metric("Benchmark corpus", "HC3 · 2023")
+    k3.metric("Cleaned samples", "79,331")
 
     presets = get_sample_presets()
     preset_choice = st.selectbox(
-        "Try a sample passage",
+        "LOAD A SAMPLE PASSAGE",
         options=list(presets.keys()),
         index=0,
-        help="Load an example if you want to test the interface quickly.",
+        help="Use a prepared sample to test the workflow without typing a passage.",
     )
     default_text = presets[preset_choice] if preset_choice in presets else ""
 
-    main_col, side_col = st.columns([1.75, 0.85], gap="large")
+    main_col, side_col = st.columns([1.65, .85], gap="large")
     with main_col:
+        st.markdown("#### The passage")
         text_input = st.text_area(
             "Text to analyze",
             value=default_text,
-            height=245,
+            height=255,
             placeholder="Paste or type a passage here…",
-            help="The selected saved model will classify the text as Human-Written or AI-Generated.",
+            help="The selected saved model will evaluate this text.",
+            label_visibility="collapsed",
         )
-        n_words = len(text_input.split())
-        n_chars = len(text_input)
+        word_count = len(text_input.split())
+        char_count = len(text_input)
         m1, m2 = st.columns(2)
-        m1.caption(f"{n_words:,} words")
-        m2.caption(f"{n_chars:,} characters")
-        analyze_btn = st.button("Analyze text  →", type="primary", use_container_width=False)
+        m1.caption(f"↳ {word_count:,} words")
+        m2.caption(f"↳ {char_count:,} characters")
+        analyze_btn = st.button("Run analysis  ↗", type="primary", use_container_width=True)
 
     with side_col:
         st.markdown(
             """
-            <div style="background:#f5f5f7;border-radius:18px;padding:21px 20px;margin:.3rem 0 1rem;">
-              <div style="font-size:.72rem;color:#6e6e73;font-weight:650;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">
-                Current configuration
+            <div class="ff-lime-card" style="min-height:210px;margin:.1rem 0 1rem;">
+              <div style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.8rem;">
+                HOW IT WORKS
               </div>
-              <div style="font-size:1.12rem;color:#1d1d1f;font-weight:650;letter-spacing:-.02em;margin-bottom:6px;">
-                Selected model
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:1.65rem;font-weight:700;letter-spacing:-.05em;line-height:1.05;margin-bottom:1rem;">
+                Three models.<br>One clear view.
               </div>
-              <div style="font-size:.95rem;color:#424245;line-height:1.5;margin-bottom:16px;">
-                MODEL_NAME_PLACEHOLDER
-              </div>
-              <div style="height:1px;background:#d2d2d7;margin:12px 0;"></div>
-              <div style="font-size:.84rem;color:#424245;line-height:1.6;">
-                <b style="color:#1d1d1f;">How it works</b><br>
-                1. Text is cleaned.<br>
-                2. The selected model predicts a class.<br>
-                3. Word-level signals are shown when available.
+              <p style="font-size:.88rem;line-height:1.55;margin:0;">
+                Clean the input. Run the selected classifier. Review the signals that contributed to the result.
+              </p>
+            </div>
+            <div style="border:1px solid rgba(226,239,197,.16);border-radius:16px;padding:16px 17px;background:rgba(255,255,255,.02);">
+              <div class="ff-mini">AVAILABLE MODELS</div>
+              <div style="margin-top:.7rem;line-height:2;color:#e6ecd9;font-size:.9rem;">
+                <span style="color:#b1dd40;">01</span> &nbsp; Linear SVM<br>
+                <span style="color:#b1dd40;">02</span> &nbsp; Logistic Regression<br>
+                <span style="color:#b1dd40;">03</span> &nbsp; XGBoost
               </div>
             </div>
-            """.replace("MODEL_NAME_PLACEHOLDER", selected_model),
+            """,
             unsafe_allow_html=True,
         )
-        st.caption("A model may misclassify formal human writing, short passages, or text from unfamiliar domains.")
+        st.caption("Short passages, formal human writing, and unfamiliar domains can be misclassified.")
 
     if analyze_btn:
         if len(text_input.strip()) < 10:
@@ -298,7 +306,7 @@ def page_home_detection(selected_model: str):
                 render_prediction_result(result)
                 render_text_stats(result.get("text_stats", {}))
 
-                exps = []
+                explanations = []
                 if model_code in ["svm", "lr"]:
                     pipeline_path = (
                         SVM_DIR / "svm_pipeline.joblib"
@@ -307,11 +315,10 @@ def page_home_detection(selected_model: str):
                     )
                     if pipeline_path.exists():
                         pipeline = joblib.load(pipeline_path)
-                        exps = get_lr_feature_weights(pipeline, text_input, top_n=10)
+                        explanations = get_lr_feature_weights(pipeline, text_input, top_n=10)
 
-                if exps:
-                    render_explanation_card(exps, model_name=selected_model)
-
+                if explanations:
+                    render_explanation_card(explanations, model_name=selected_model)
             except Exception as exc:
                 st.error(f"Analysis failed: {exc}")
 
@@ -320,9 +327,10 @@ def page_home_detection(selected_model: str):
 
 def page_document_analysis(selected_model: str):
     """Render document upload, multi-chunk segmentation, and document-level aggregation."""
-    st.markdown("### 📄 Document Analysis & Segmentation")
+    st.markdown('<div class="ff-section-label">02 / DOCUMENT WORKSPACE</div>', unsafe_allow_html=True)
+    st.markdown("### Read beyond the first line.")
     st.write(
-        "Upload an academic essay, report, or article (`.txt`, `.pdf`, `.docx`). "
+         "Upload an academic essay, report, or article (`.txt`, `.pdf`, `.docx`). "
         "The document will be segmented into coherent paragraphs, analyzed chunk-by-chunk, "
         "and aggregated into a document-level estimate."
     )

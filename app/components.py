@@ -162,43 +162,34 @@ def render_header(compact: bool = False) -> None:
 # ── Prediction Result Display ────────────────────────────────────────────────
 
 def render_prediction_result(result: Dict[str, Any]):
-    """Render an acid-lime/dark-green result card using the model's actual output."""
+    """Render the model's actual prediction using the shared result-card system."""
     label = result.get("label", "Unknown")
     confidence = float(result.get("confidence", 0.0))
     model = result.get("model", "Unknown")
+
     is_ai = label == "AI-Generated"
-    accent = "#b1dd40" if is_ai else "#c8f45c"
-    panel = "#262515" if is_ai else "#1a2510"
-    icon = "✳" if is_ai else "↗"
+    variant = "ff-result--ai" if is_ai else "ff-result--human"
     ai_prob = confidence if is_ai else (1.0 - confidence)
     human_prob = 1.0 - ai_prob
 
     st.markdown(
         f"""
-        <div style="background:linear-gradient(135deg,{panel},#171d0b);
-                    border:1px solid rgba(177,221,64,.36);border-radius:18px;
-                    padding:22px 24px;margin:18px 0 18px;
-                    box-shadow:0 12px 32px rgba(0,0,0,.12);">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
-            <div>
-              <div style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:{accent};">
-                MODEL OUTPUT / CLASSIFICATION
-              </div>
-              <div style="font-family:'Space Grotesk',sans-serif;color:#f0f3e7;font-size:clamp(1.55rem,3vw,2.2rem);
-                          font-weight:700;letter-spacing:-.055em;margin:8px 0 5px;">
-                {icon} {label}
-              </div>
-              <div style="font-size:.86rem;color:#a0a990;">Evaluated by <b style="color:#e9eddc;">{model}</b></div>
+        <article class="ff-result {variant}" aria-label="Model prediction">
+          <div class="ff-result__top">
+            <div class="ff-result__copy">
+              <div class="ff-result__eyebrow">MODEL OUTPUT / CLASSIFICATION</div>
+              <h3 class="ff-result__title">{escape(str(label))}</h3>
+              <div class="ff-result__meta">Evaluated by <strong>{escape(str(model))}</strong></div>
             </div>
-            <div style="background:#b1dd40;border-radius:15px;padding:13px 17px;min-width:140px;">
-              <div style="font-family:'DM Mono',monospace;font-size:.66rem;color:#31391c;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">Confidence</div>
-              <div style="font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1.12;font-weight:700;color:#171b0c;">{confidence * 100:.1f}%</div>
+            <div class="ff-result__confidence">
+              <div class="ff-result__confidence-label">Model confidence</div>
+              <div class="ff-result__confidence-value">{confidence * 100:.1f}%</div>
             </div>
           </div>
-          <div style="margin-top:15px;font-size:.79rem;color:#aeb79d;line-height:1.6;">
+          <p class="ff-result__note">
             This is a model estimate based on learned HC3 patterns, not proof of who authored the passage.
-          </div>
-        </div>
+          </p>
+        </article>
         """,
         unsafe_allow_html=True,
     )
@@ -246,8 +237,8 @@ def render_explanation_card(exps: List[Dict[str, Any]], model_name: str = "Linea
         if ai_terms:
             for item in ai_terms:
                 st.markdown(
-                    f"<span style='background-color: #fee2e2; color: #991b1b; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-family: monospace; display: inline-block; margin: 2px;'>"
-                    f"{item['feature']} (+{item['weight']:.3f})</span>",
+                    f"<span class='ff-explain-chip ff-explain-chip--ai'>"
+                    f"{escape(str(item['feature']))} (+{float(item['weight']):.3f})</span>",
                     unsafe_allow_html=True,
                 )
         else:
@@ -258,8 +249,8 @@ def render_explanation_card(exps: List[Dict[str, Any]], model_name: str = "Linea
         if human_terms:
             for item in human_terms:
                 st.markdown(
-                    f"<span style='background-color: #dcfce7; color: #166534; padding: 3px 8px; border-radius: 6px; font-weight: 600; font-family: monospace; display: inline-block; margin: 2px;'>"
-                    f"{item['feature']} ({item['weight']:.3f})</span>",
+                    f"<span class='ff-explain-chip ff-explain-chip--human'>"
+                    f"{escape(str(item['feature']))} ({float(item['weight']):.3f})</span>",
                     unsafe_allow_html=True,
                 )
         else:
@@ -269,42 +260,32 @@ def render_explanation_card(exps: List[Dict[str, Any]], model_name: str = "Linea
 # ── Document Analysis Components ─────────────────────────────────────────────
 
 def render_document_summary(analysis: Dict[str, Any]):
-    """Render the document-level estimate in the same Flashform-inspired visual style."""
+    """Render document-level estimates using the shared result-card system."""
     overall = analysis["overall_prediction"]
     conf = analysis["overall_confidence"]
     is_ai = overall == "AI-Generated"
-    accent = "#b1dd40"
-    panel = "#282515" if is_ai else "#1b2410"
-    icon = "✳" if is_ai else "↗"
+    variant = "ff-result--ai" if is_ai else "ff-result--human"
+    filename = escape(str(analysis.get("filename", "document")))
+    model_used = escape(str(analysis.get("model_used", "Linear SVM")))
 
     st.markdown(
         f"""
-        <div style="background:linear-gradient(135deg,{panel},#171d0b);
-                    border:1px solid rgba(177,221,64,.36);border-radius:18px;
-                    padding:22px 24px;margin:16px 0 20px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
-            <div>
-              <div style="font-family:'DM Mono',monospace;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:{accent};">
-                DOCUMENT OUTPUT / ESTIMATE
-              </div>
-              <div style="font-family:'Space Grotesk',sans-serif;color:#f0f3e7;font-size:clamp(1.55rem,3vw,2.2rem);
-                          font-weight:700;letter-spacing:-.055em;margin:8px 0 5px;">
-                {icon} {overall}
-              </div>
-              <div style="font-size:.86rem;color:#a0a990;">
-                File <b style="color:#e9eddc;">{analysis.get('filename', 'document')}</b>
-                &nbsp;·&nbsp; Model <b style="color:#e9eddc;">{analysis.get('model_used', 'Linear SVM')}</b>
-              </div>
+        <article class="ff-result {variant}" aria-label="Document-level estimate">
+          <div class="ff-result__top">
+            <div class="ff-result__copy">
+              <div class="ff-result__eyebrow">DOCUMENT OUTPUT / ESTIMATE</div>
+              <h3 class="ff-result__title">{escape(str(overall))}</h3>
+              <div class="ff-result__meta">File <strong>{filename}</strong> · Model <strong>{model_used}</strong></div>
             </div>
-            <div style="background:{accent};border-radius:15px;padding:13px 17px;min-width:145px;">
-              <div style="font-family:'DM Mono',monospace;font-size:.66rem;color:#31391c;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">Confidence</div>
-              <div style="font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1.12;font-weight:700;color:#171b0c;">{conf * 100:.1f}%</div>
+            <div class="ff-result__confidence">
+              <div class="ff-result__confidence-label">Aggregate confidence</div>
+              <div class="ff-result__confidence-value">{conf * 100:.1f}%</div>
             </div>
           </div>
-          <div style="margin-top:15px;font-size:.79rem;color:#aeb79d;line-height:1.6;">
+          <p class="ff-result__note">
             Estimated by aggregating chunk predictions. This is not an independently validated document-level benchmark.
-          </div>
-        </div>
+          </p>
+        </article>
         """,
         unsafe_allow_html=True,
     )

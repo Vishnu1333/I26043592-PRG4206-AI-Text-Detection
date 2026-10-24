@@ -175,8 +175,9 @@ def render_login_screen():
 
 
 def render_sidebar():
-    """Render the compact app navigation, model selector, and sign-out control."""
-    brand_col, nav_col, model_col, logout_col = st.columns([1.25, 5.0, 1.55, .65])
+    """Render a responsive brand/model row and a full-width, functional page navigation."""
+    brand_col, model_col, logout_col = st.columns([2.5, 1.6, .55], gap="large")
+
     with brand_col:
         st.markdown(
             """
@@ -187,30 +188,6 @@ def render_sidebar():
             """,
             unsafe_allow_html=True,
         )
-
-    nav_options = ["Overview", "Detect", "Docs", "Results", "Explain", "About"]
-    nav_page = st.session_state.get("text_signal_navigation", "Overview")
-    if nav_page not in nav_options:
-        nav_page = "Overview"
-        st.session_state["text_signal_navigation"] = nav_page
-
-    # Use regular buttons instead of native radio controls, so navigation text
-    # and selected states remain reliable across Streamlit versions and themes.
-    with nav_col:
-        nav_slots = st.columns(len(nav_options), gap="small")
-        for nav_slot, option in zip(nav_slots, nav_options):
-            with nav_slot:
-                is_current = option == nav_page
-                if st.button(
-                    option,
-                    key=f"text_signal_nav_{option.lower()}",
-                    type="primary" if is_current else "secondary",
-                    use_container_width=True,
-                ):
-                    st.session_state["text_signal_navigation"] = option
-                    st.rerun()
-
-    nav_page = st.session_state.get("text_signal_navigation", "Overview")
 
     available_models = get_available_models()
     with model_col:
@@ -226,15 +203,38 @@ def render_sidebar():
                 key="text_signal_active_model",
                 label_visibility="collapsed",
             )
-            # Keep the header compact; the selectbox retains its accessible "Active model" label.
 
     with logout_col:
-        if st.button("Exit", key="text_signal_logout", use_container_width=True, help="Sign out of the research workspace"):
+        if st.button(
+            "Exit",
+            key="text_signal_logout",
+            use_container_width=True,
+            help="Sign out of the research workspace",
+        ):
             st.session_state["text_signal_authenticated"] = False
             st.session_state.pop("text_signal_access_mode", None)
             st.rerun()
 
-    return nav_page, selected_model
+    # Full-width navigation row avoids squeezing six options into the brand/model header.
+    nav_options = ["Overview", "Detect", "Docs", "Results", "Explain", "About"]
+    nav_page = st.session_state.get("text_signal_navigation", "Overview")
+    if nav_page not in nav_options:
+        nav_page = "Overview"
+        st.session_state["text_signal_navigation"] = nav_page
+
+    nav_slots = st.columns(6, gap="small")
+    for nav_slot, option in zip(nav_slots, nav_options):
+        with nav_slot:
+            if st.button(
+                option,
+                key=f"text_signal_nav_{option.lower()}",
+                type="primary" if option == nav_page else "secondary",
+                use_container_width=True,
+            ):
+                st.session_state["text_signal_navigation"] = option
+                st.rerun()
+
+    return st.session_state.get("text_signal_navigation", "Overview"), selected_model
 
 
 # ── Page 0: Dashboard Overview ───────────────────────────────────────────────

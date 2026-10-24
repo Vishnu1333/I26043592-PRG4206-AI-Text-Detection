@@ -66,9 +66,25 @@ def render_sidebar():
     """Render sidebar navigation, model selector, and system metadata."""
     st.sidebar.markdown(
         """
-        <div style='text-align: center; padding-bottom: 10px;'>
-            <h2 style='color: #0f172a; margin-bottom: 2px;'>🤖 AI Text Detector</h2>
-            <span style='color: #64748b; font-size: 0.85rem;'>PRG4206 Machine Learning</span>
+        <div style="padding: 8px 4px 16px 4px;">
+          <div style="display:flex;align-items:center;gap:11px;">
+            <div style="height:44px;width:44px;min-width:44px;border-radius:14px;
+                        display:flex;align-items:center;justify-content:center;
+                        background:linear-gradient(145deg,#6d8cff,#29c4d7);
+                        color:#071225;font-size:1.05rem;font-weight:900;
+                        box-shadow:0 8px 20px rgba(70,112,244,.28);">
+              AI
+            </div>
+            <div>
+              <div style="font-size:1.03rem;font-weight:800;letter-spacing:-.02em;color:#f1f5ff;">
+                TEXT INTELLIGENCE
+              </div>
+              <div style="font-size:.74rem;color:#9db0d0;margin-top:3px;">
+                PRG4206 · Research workspace
+              </div>
+            </div>
+          </div>
+          <div style="height:1px;background:linear-gradient(90deg,rgba(119,151,255,.55),rgba(119,151,255,0));margin-top:18px;"></div>
         </div>
         """,
         unsafe_allow_html=True,
@@ -112,14 +128,32 @@ def render_sidebar():
     st.sidebar.markdown("---")
     st.sidebar.markdown(
         """
-        <div style='background-color: #f8fafc; border-radius: 8px; padding: 12px; font-size: 0.8rem; color: #475569;'>
-            <b>Benchmark Details:</b><br/>
-            • Corpus: HC3 (2023)<br/>
-            • Samples: 79,331 verified<br/>
-            • Test Split: N = 11,900<br/>
-            • SVM F1: 0.9790<br/>
-            • LR F1: 0.9777<br/>
-            • XGBoost F1: 0.9543
+        <div style="background:linear-gradient(145deg,rgba(25,42,70,.92),rgba(14,25,43,.94));
+                    border:1px solid rgba(145,169,219,.2);border-radius:15px;
+                    padding:14px 14px 12px;font-size:.79rem;color:#c8d5eb;
+                    box-shadow:0 10px 24px rgba(0,0,0,.12);">
+          <div style="font-size:.7rem;color:#8fb4ff;letter-spacing:.13em;font-weight:800;text-transform:uppercase;margin-bottom:10px;">
+            Benchmark snapshot
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span style="color:#9fb0ce;">Corpus</span><b style="color:#f1f5ff;">HC3 · 2023</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span style="color:#9fb0ce;">Clean samples</span><b style="color:#f1f5ff;">79,331</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span style="color:#9fb0ce;">Held-out test</span><b style="color:#f1f5ff;">11,900</b>
+          </div>
+          <div style="height:1px;background:rgba(145,169,219,.17);margin:8px 0;"></div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span style="color:#9fb0ce;">Linear SVM · F1</span><b style="color:#65e2bc;">0.9790</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span style="color:#9fb0ce;">Logistic Reg. · F1</span><b style="color:#65e2bc;">0.9777</b>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;">
+            <span style="color:#9fb0ce;">XGBoost · F1</span><b style="color:#c8d5eb;">0.9543</b>
+          </div>
         </div>
         """,
         unsafe_allow_html=True,

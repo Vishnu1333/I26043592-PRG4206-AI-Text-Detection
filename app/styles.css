@@ -389,3 +389,181 @@ img, svg { max-width: 100%; }
     .ff-hero h1 { font-size: clamp(2.35rem, 9.5vw, 4rem); }
     .ff-marquee-track span { font-size: .64rem; }
 }
+
+
+/* ── Refinement pass: interaction, contrast and responsive layout ─────────── */
+:root {
+    --ff-text-soft: #d4dcc6;
+    --ff-text-muted: #b8c2a4;
+    --ff-input-bg: #151b0a;
+    --ff-focus-ring: rgba(200, 244, 92, .82);
+    --ff-success: #c8f45c;
+    --ff-warning: #f7d67a;
+    --ff-danger: #ff9b91;
+    --ff-space-section: clamp(2.5rem, 6vw, 5.5rem);
+}
+
+html { scroll-behavior: smooth; }
+body { text-rendering: optimizeLegibility; }
+.stApp { min-width: 0; }
+.main .block-container { width: 100%; }
+
+/* Give Streamlit's native controls a consistent minimum hit area. */
+.stButton > button,
+[data-testid="stDownloadButton"] button,
+[data-testid="stFormSubmitButton"] button {
+    min-height: 44px;
+    line-height: 1.2;
+}
+.stButton > button:active,
+[data-testid="stDownloadButton"] button:active,
+[data-testid="stFormSubmitButton"] button:active {
+    transform: scale(.985);
+}
+.stButton > button:disabled,
+[data-testid="stDownloadButton"] button:disabled,
+[data-testid="stFormSubmitButton"] button:disabled {
+    opacity: .58;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+.stButton > button:focus-visible,
+[data-testid="stDownloadButton"] button:focus-visible,
+[data-testid="stFormSubmitButton"] button:focus-visible,
+[data-baseweb="select"]:focus-within,
+[data-baseweb="input"]:focus-within,
+[data-baseweb="textarea"]:focus-within {
+    outline: 3px solid var(--ff-focus-ring) !important;
+    outline-offset: 3px;
+}
+[data-baseweb="select"] > div,
+[data-baseweb="input"] > div,
+[data-baseweb="textarea"] > div {
+    min-height: 44px;
+    background: var(--ff-input-bg);
+}
+[data-baseweb="textarea"] textarea {
+    line-height: 1.65;
+}
+[data-testid="stCaptionContainer"] {
+    color: var(--ff-text-muted);
+}
+[data-testid="stAlert"] {
+    border: 1px solid var(--ff-line);
+}
+
+/* Clear active navigation, with a scrollable row on small viewports. */
+[data-testid="stRadio"] [role="radiogroup"] {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ff-lime) transparent;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label:hover {
+    border-color: rgba(177, 221, 64, .42);
+}
+[data-testid="stRadio"] [role="radiogroup"] input:focus-visible + div {
+    outline: 3px solid var(--ff-focus-ring);
+    outline-offset: 3px;
+    border-radius: 999px;
+}
+
+/* Reusable content primitives for editorial sections and explanatory callouts. */
+.ff-page-heading {
+    max-width: 850px;
+    margin: 0 0 var(--ff-space-5);
+}
+.ff-page-heading__eyebrow {
+    font-family: var(--ff-label-font);
+    color: var(--ff-lime);
+    font-size: var(--ff-type-xs);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: var(--ff-space-3);
+}
+.ff-page-heading__title {
+    margin: 0 0 var(--ff-space-3);
+    font-family: var(--ff-heading-font);
+    font-size: var(--ff-type-xl);
+    line-height: 1.05;
+    letter-spacing: -.055em;
+    color: var(--ff-text);
+}
+.ff-page-heading__description {
+    max-width: 720px;
+    color: var(--ff-text-soft);
+    font-size: var(--ff-type-base);
+    line-height: 1.65;
+}
+.ff-footer {
+    margin-top: var(--ff-space-section);
+    padding: var(--ff-space-5) 0 var(--ff-space-3);
+    border-top: 1px solid var(--ff-line);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--ff-space-4);
+    flex-wrap: wrap;
+}
+.ff-footer__brand {
+    color: var(--ff-text);
+    font-family: var(--ff-heading-font);
+    font-weight: 700;
+    letter-spacing: -.025em;
+}
+.ff-footer__meta {
+    color: var(--ff-text-muted);
+    font-size: var(--ff-type-xs);
+    line-height: 1.6;
+}
+.ff-callout {
+    border: 1px solid var(--ff-line);
+    border-radius: var(--ff-radius-xl);
+    background: linear-gradient(145deg, var(--ff-panel-2), var(--ff-panel));
+    padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+/* Avoid clipping content or forcing a wide canvas on phones and tablets. */
+@media (max-width: 767px) {
+    .main .block-container {
+        padding-left: max(.75rem, env(safe-area-inset-left));
+        padding-right: max(.75rem, env(safe-area-inset-right));
+    }
+    [data-testid="stRadio"] [role="radiogroup"] {
+        justify-content: flex-start;
+        overflow-x: auto;
+        max-width: 100%;
+        padding-bottom: .2rem;
+    }
+    .ff-hero { padding: 1.25rem; }
+    .ff-hero:after { opacity: .45; }
+    .ff-hero-foot { gap: .4rem; }
+    .ff-chip { white-space: normal; }
+    .ff-footer { flex-direction: column; }
+}
+@media (max-width: 360px) {
+    .main .block-container {
+        padding-left: .65rem;
+        padding-right: .65rem;
+    }
+    .ff-hero h1 { font-size: clamp(2rem, 11vw, 2.65rem); }
+    .ff-chip { font-size: .62rem; }
+}
+@media (min-width: 1024px) {
+    .ff-page-heading { margin-bottom: var(--ff-space-6); }
+}
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

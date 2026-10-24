@@ -229,6 +229,20 @@ The pinned numerical packages are intended for **Python 3.12**. The previous dep
 Changes committed to `main` are picked up by Streamlit Community Cloud after the build succeeds. A local edit alone does not update the live repository.
 
 
+## Frontend Experience and Login
+
+The frontend has been rebuilt with an original **Flashform-inspired** visual direction: near-black olive surfaces, acid-lime highlights, oversized editorial typography, compact navigation, motion details, and high-contrast cards. It does not copy the reference site's source code.
+
+### Login access
+- If credentials are not configured, the login screen offers an explicitly labelled **demo workspace** button. This is convenient for an academic prototype but is not secure account authentication.
+- For configured credentials, add the following values under **Streamlit Community Cloud → App settings → Secrets**. Do not commit real credentials to GitHub:
+  ```toml
+  [auth]
+  username = "your-demo-username"
+  password = "replace-with-a-strong-password"
+  ```
+- Once credentials are configured, the sign-in form checks the values from Streamlit secrets. Use HTTPS and proper identity management before using any production or sensitive data.
+
 ## Streamlit UI & Document Analysis Architecture
 
 The web interface features five primary navigation views:

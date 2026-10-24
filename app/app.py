@@ -54,8 +54,8 @@ from src.inference import predict_text
 
 # ── App Configuration ────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="AI Text Detector | PRG4206",
-    page_icon="🤖",
+    page_title="Text Signal | PRG4206",
+    page_icon="✳",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -63,7 +63,7 @@ st.set_page_config(
 ensure_dirs()
 
 
-# ── Sidebar Navigation & Model Selector ──────────────────────────────────────
+# ── Login, Top Navigation & Model Selector ───────────────────────────────────
 
 def _get_login_credentials():
     """Read optional login credentials from Streamlit secrets or environment variables."""

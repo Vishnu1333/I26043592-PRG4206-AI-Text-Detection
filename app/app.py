@@ -111,99 +111,71 @@ def render_sidebar():
 # ── Page 1: Home / Detection (Single Text Input) ──────────────────────────────
 
 def page_home_detection(selected_model: str):
-    """Render the FinMind-inspired text detection workspace."""
-    st.markdown('<div class="prg-section-label">LIVE WORKSPACE / TEXT ANALYSIS</div>', unsafe_allow_html=True)
-    st.markdown("### Inspect a passage")
-    st.caption(
-        "Run a saved model against a text sample, then review its output and the features "
-        "that influenced the prediction. The result is a research estimate, not proof of authorship."
+    """Render a clean Apple-inspired detection screen."""
+    st.markdown('<div class="apple-section-label">TEXT ANALYSIS</div>', unsafe_allow_html=True)
+    st.markdown("### A closer look at your text")
+    st.markdown(
+        "Choose a model, paste a passage, and review what the classifier predicts. "
+        "The result is an estimate based on the HC3 benchmark—not a determination of authorship."
     )
 
-    # Dashboard-style context row: all values are from the verified HC3 evaluation.
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.metric("Active model", selected_model)
-    with c2:
-        st.metric("Clean HC3 samples", "79,331", "5 source domains")
-    with c3:
-        st.metric("Best observed accuracy", "98.61%", "Linear SVM · held-out test")
-
-    st.markdown(" ")
-    left, right = st.columns([1.65, 0.85], gap="large")
-
     presets = get_sample_presets()
-    with left:
-        st.markdown("#### Text input")
-        preset_choice = st.selectbox(
-            "Load a sample passage",
-            options=list(presets.keys()),
-            index=0,
-            help="Sample passages are provided to make it easy to test the interface.",
-        )
-        default_text = presets[preset_choice] if preset_choice in presets else ""
+    preset_choice = st.selectbox(
+        "Try a sample passage",
+        options=list(presets.keys()),
+        index=0,
+        help="Load an example if you want to test the interface quickly.",
+    )
+    default_text = presets[preset_choice] if preset_choice in presets else ""
+
+    main_col, side_col = st.columns([1.75, 0.85], gap="large")
+    with main_col:
         text_input = st.text_area(
             "Text to analyze",
             value=default_text,
-            height=230,
-            placeholder="Paste a passage here. Use at least 10 characters to run a prediction.",
-            help="Text is processed by the selected saved model in this application.",
+            height=245,
+            placeholder="Paste or type a passage here…",
+            help="The selected saved model will classify the text as Human-Written or AI-Generated.",
         )
-        words = len(text_input.split())
-        chars = len(text_input)
-        stat1, stat2 = st.columns(2)
-        stat1.caption(f"✍️ {words:,} words")
-        stat2.caption(f"⌨️ {chars:,} characters")
+        n_words = len(text_input.split())
+        n_chars = len(text_input)
+        m1, m2 = st.columns(2)
+        m1.caption(f"{n_words:,} words")
+        m2.caption(f"{n_chars:,} characters")
+        analyze_btn = st.button("Analyze text  →", type="primary", use_container_width=False)
 
-        col_btn, col_hint = st.columns([1, 1.55])
-        with col_btn:
-            analyze_btn = st.button("Analyze passage  →", type="primary", use_container_width=True)
-        with col_hint:
-            st.caption("Choose a model in the left sidebar.")
-
-    with right:
+    with side_col:
         st.markdown(
             """
-            <div style="background:linear-gradient(150deg,rgba(25,42,72,.86),rgba(13,24,41,.91));
-                        border:1px solid rgba(145,169,219,.20);border-radius:17px;
-                        padding:20px 19px;margin:4px 0 14px 0;box-shadow:0 12px 26px rgba(0,0,0,.12);">
-              <div style="font-size:.7rem;font-weight:800;letter-spacing:.13em;color:#8fb4ff;text-transform:uppercase;margin-bottom:10px;">
-                Analysis pipeline
+            <div style="background:#f5f5f7;border-radius:18px;padding:21px 20px;margin:.3rem 0 1rem;">
+              <div style="font-size:.72rem;color:#6e6e73;font-weight:650;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">
+                Current configuration
               </div>
-              <div style="font-size:1.05rem;font-weight:750;color:#f1f5ff;margin-bottom:12px;">
-                From text to evidence
+              <div style="font-size:1.12rem;color:#1d1d1f;font-weight:650;letter-spacing:-.02em;margin-bottom:6px;">
+                Selected model
               </div>
-              <div style="display:flex;gap:11px;margin:13px 0;align-items:flex-start;">
-                <div style="background:rgba(119,151,255,.16);border:1px solid rgba(119,151,255,.28);border-radius:10px;padding:7px 9px;color:#a9c2ff;">01</div>
-                <div><b style="color:#eaf0fc;">Normalize</b><div style="font-size:.83rem;color:#a8b7d0;margin-top:3px;">Clean formatting while retaining useful language signals.</div></div>
+              <div style="font-size:.95rem;color:#424245;line-height:1.5;margin-bottom:16px;">
+                MODEL_NAME_PLACEHOLDER
               </div>
-              <div style="display:flex;gap:11px;margin:13px 0;align-items:flex-start;">
-                <div style="background:rgba(76,214,232,.12);border:1px solid rgba(76,214,232,.25);border-radius:10px;padding:7px 9px;color:#80e5ef;">02</div>
-                <div><b style="color:#eaf0fc;">Classify</b><div style="font-size:.83rem;color:#a8b7d0;margin-top:3px;">Score the passage using the selected saved model.</div></div>
-              </div>
-              <div style="display:flex;gap:11px;margin:13px 0;align-items:flex-start;">
-                <div style="background:rgba(74,222,173,.12);border:1px solid rgba(74,222,173,.25);border-radius:10px;padding:7px 9px;color:#78e9c1;">03</div>
-                <div><b style="color:#eaf0fc;">Explain</b><div style="font-size:.83rem;color:#a8b7d0;margin-top:3px;">Review local term contributions where supported.</div></div>
-              </div>
-              <div style="height:1px;background:rgba(145,169,219,.16);margin:15px 0 12px;"></div>
-              <div style="font-size:.78rem;color:#b9c8df;line-height:1.6;">
-                <b style="color:#eaf0fc;">Models available</b><br>
-                Linear SVM · Logistic Regression · XGBoost
+              <div style="height:1px;background:#d2d2d7;margin:12px 0;"></div>
+              <div style="font-size:.84rem;color:#424245;line-height:1.6;">
+                <b style="color:#1d1d1f;">How it works</b><br>
+                1. Text is cleaned.<br>
+                2. The selected model predicts a class.<br>
+                3. Word-level signals are shown when available.
               </div>
             </div>
-            """,
+            """.replace("MODEL_NAME_PLACEHOLDER", selected_model),
             unsafe_allow_html=True,
         )
-        st.warning(
-            "Use results cautiously. A detector can make mistakes, especially with short text, "
-            "formal human writing, or material from a different domain."
-        )
+        st.caption("A model may misclassify formal human writing, short passages, or text from unfamiliar domains.")
 
-    if analyze_btn or (default_text and len(text_input.strip()) >= 10):
+    if analyze_btn:
         if len(text_input.strip()) < 10:
-            st.error("Input text is too short. Please provide at least 10 characters.")
+            st.warning("Please enter at least 10 characters before running an analysis.")
             return
 
-        with st.spinner(f"Scoring text with {selected_model} …"):
+        with st.spinner(f"Analyzing with {selected_model}…"):
             try:
                 model_code = "svm"
                 if "logistic" in selected_model.lower():

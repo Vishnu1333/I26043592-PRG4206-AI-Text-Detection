@@ -36,6 +36,7 @@ from app.components import (
     render_prediction_result,
     render_text_stats,
     render_xai_deep_dive,
+    render_marquee,
 )
 from app.ui_utils import (
     get_available_models,
@@ -86,23 +87,25 @@ def render_login_screen():
     """Render an attractive login gateway; support an explicitly labelled demo mode."""
     st.markdown(
         """
-        <div class="ff-topline">
-          <div class="ff-brand"><span class="ff-mark">TS</span><span>TEXT SIGNAL<br><span style="color:#a0a990;font-size:.72rem;font-weight:400;">PRG4206 Research Console</span></span></div>
+        <div class="ff-topline ff-animate-in">
+          <div class="ff-brand"><span class="ff-mark">TS</span><span>TEXT SIGNAL<br><span style="color:#b8c2a4;font-size:.72rem;font-weight:400;">PRG4206 Research Console</span></span></div>
           <div class="ff-status">RESEARCH ACCESS</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    # The login page also gets the moving ticker; previously it appeared only after sign-in.
+    render_marquee(["TEXT SIGNAL", "DETECT", "COMPARE", "EXPLAIN", "VALIDATE", "UNDERSTAND"])
 
     col_copy, col_form = st.columns([1.15, .85], gap="large")
     with col_copy:
         st.markdown('<div class="ff-mini">A machine-learning research workspace</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="ff-login-title">Read the text.<br><span>Find the signal.</span></div>',
+            '<div class="ff-login-title ff-animate-in">Read the text.<br><span class="ff-login-accent">Find the signal.</span><span class="ff-login-orbit" aria-hidden="true">✳</span></div>',
             unsafe_allow_html=True,
         )
         st.markdown(
-            '<div class="ff-login-copy">Compare human-written and AI-generated text using three saved models. Explore the evidence behind a prediction, review benchmark results, and inspect long documents one section at a time.</div>',
+            '<div class="ff-login-copy ff-animate-in ff-delay-2">Compare human-written and AI-generated text using three saved models. Explore the evidence behind a prediction, review benchmark results, and inspect long documents one section at a time.</div>',
             unsafe_allow_html=True,
         )
         st.markdown(
@@ -121,7 +124,7 @@ def render_login_screen():
     with col_form:
         st.markdown(
             """
-            <div class="ff-lime-card" style="margin-bottom:1rem;">
+            <div class="ff-lime-card ff-login-panel ff-animate-in ff-delay-3" style="margin-bottom:1rem;">
               <div class="ff-mini" style="color:#313a1b;">WELCOME BACK</div>
               <h3 style="font-size:2rem;line-height:1.05;margin:.55rem 0 .45rem;">Your workspace,<br>ready when you are.</h3>
               <p style="margin:0;">Sign in to continue to the detection dashboard.</p>

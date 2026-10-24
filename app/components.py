@@ -190,7 +190,9 @@ def render_global_styles():
         .ff-brand {display:flex; align-items:center; gap:.65rem; color:var(--ff-text); font-size:.83rem; font-weight:700; letter-spacing:-.02em;}
         .ff-mark {display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:var(--ff-lime);color:var(--ff-ink);font-weight:800;font-size:.75rem;}
         .ff-status {font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;color:var(--ff-lime);border:1px solid rgba(177,221,64,.35);border-radius:999px;padding:.45rem .7rem;white-space:nowrap;}
+        @keyframes ff-enter { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
         .ff-hero {
+            animation: ff-enter 650ms cubic-bezier(.2,.75,.25,1) both;
             position:relative; overflow:hidden; padding:clamp(1.6rem,4vw,3.8rem);
             margin:.25rem 0 1.5rem; border:1px solid var(--ff-line); border-radius:22px;
             background:linear-gradient(130deg,rgba(27,34,16,.98),rgba(17,22,6,.98));
@@ -210,7 +212,13 @@ def render_global_styles():
         .ff-band strong {font-family:'Space Grotesk',sans-serif;font-size:1.12rem;letter-spacing:-.03em;color:var(--ff-ink);}
         .ff-band p {color:#30391c !important;margin:.3rem 0 0;font-size:.9rem;line-height:1.5;}
         .ff-section-label {font-family:'DM Mono',monospace;color:var(--ff-lime);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.35rem;}
-        .ff-lime-card {background:var(--ff-lime);color:var(--ff-ink);border-radius:18px;padding:1.25rem 1.35rem;}
+        .ff-lime-card {background:var(--ff-lime);color:var(--ff-ink);border-radius:18px;padding:1.25rem 1.35rem;transition:transform 180ms ease, box-shadow 180ms ease;}
+        .ff-lime-card:hover {transform:translateY(-3px);box-shadow:0 14px 32px rgba(0,0,0,.16);}
+        [data-testid="stMetric"] {transition:transform 180ms ease,border-color 180ms ease;}
+        [data-testid="stMetric"]:hover {transform:translateY(-2px);border-color:rgba(177,221,64,.42);}
+        @media (prefers-reduced-motion: reduce) {
+            .ff-hero,.ff-lime-card,[data-testid="stMetric"] {animation:none;transition:none;}
+        }
         .ff-lime-card h3,.ff-lime-card p,.ff-lime-card strong {color:var(--ff-ink) !important;}
         [data-testid="stForm"] {background:var(--ff-lime);border:0;border-radius:22px;padding:1.25rem 1.25rem .85rem;}
         [data-testid="stForm"] label, [data-testid="stForm"] p {color:var(--ff-ink) !important;}
@@ -247,10 +255,6 @@ def render_header():
     """Render the project masthead and Flashform-inspired hero."""
     st.markdown(
         """
-        <div class="ff-topline">
-          <div class="ff-brand"><span class="ff-mark">TS</span><span>TEXT SIGNAL<br><span style="color:#a0a990;font-size:.72rem;font-weight:400;">PRG4206 Research Console</span></span></div>
-          <div class="ff-status">HC3 / MODEL RESEARCH</div>
-        </div>
         <div class="ff-hero">
           <div class="ff-kicker">Language · Patterns · Evidence</div>
           <div class="ff-orbit" aria-hidden="true">✳</div>

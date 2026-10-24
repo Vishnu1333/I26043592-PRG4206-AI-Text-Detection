@@ -1585,3 +1585,353 @@ body { text-rendering: optimizeLegibility; }
 .st-key-text_signal_logout button div {
     color: #171b0c !important;
 }
+
+
+/* Text Signal poster-style login page inspired by the supplied visual reference. */
+.ts-login-canvas {
+    --ts-ink: #101503;
+    --ts-lime: #b2e238;
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    min-height: min(900px, calc(100vh - 1.4rem));
+    min-height: clamp(700px, 92vh, 930px);
+    box-sizing: border-box;
+    overflow: hidden;
+    padding: clamp(1.5rem, 4.8vw, 4.6rem);
+    margin: .15rem 0 3rem;
+    color: var(--ts-lime);
+    background:
+        radial-gradient(ellipse at 49% 42%, rgba(28,75,39,.17), transparent 25%),
+        radial-gradient(ellipse at 85% 10%, rgba(178,226,56,.035), transparent 30%),
+        var(--ts-ink);
+    border: 1px solid rgba(213,235,160,.2);
+    border-radius: 22px;
+    box-shadow: 0 24px 80px rgba(0,0,0,.12);
+}
+.ts-login-top {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 2rem;
+}
+.ts-login-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .85rem;
+    color: #f0f2e7;
+}
+.ts-login-brand-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    border-radius: 50%;
+    background: var(--ts-lime);
+    color: var(--ts-ink);
+    font-family: var(--ff-heading-font);
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: -.04em;
+}
+.ts-login-brand-copy {
+    display: flex;
+    flex-direction: column;
+    gap: .3rem;
+    color: #f0f2e7;
+    font-family: var(--ff-heading-font);
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+}
+.ts-login-brand-copy span {
+    color: #9eaa87;
+    font-family: var(--ff-label-font);
+    font-size: .62rem;
+    font-weight: 400;
+    letter-spacing: .1em;
+}
+.ts-login-try {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .85rem;
+    min-width: 105px;
+    padding-top: .05rem;
+    font-family: var(--ff-label-font);
+    font-size: .72rem;
+    letter-spacing: .09em;
+}
+.ts-login-globe {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid var(--ts-lime);
+    border-radius: 50%;
+    font-size: 2rem;
+    line-height: 1;
+    font-family: var(--ff-body-font);
+    animation: ts-globe-breathe 5s ease-in-out infinite;
+}
+.ts-login-try a {
+    color: var(--ts-lime) !important;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(178,226,56,.6);
+    padding-bottom: .2rem;
+    transition: color .2s ease, border-color .2s ease;
+}
+.ts-login-try a:hover {
+    color: #e0ff8b !important;
+    border-color: #e0ff8b;
+}
+.ts-login-composition {
+    position: relative;
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    min-height: 430px;
+    margin: .8rem 0 0;
+}
+.ts-login-composition h1 {
+    position: relative;
+    z-index: 2;
+    max-width: 58%;
+    margin: 0;
+    color: var(--ts-lime) !important;
+    font-family: var(--ff-body-font);
+    font-size: clamp(4.7rem, 9.7vw, 9.7rem);
+    font-weight: 400;
+    line-height: .79;
+    letter-spacing: -.075em;
+}
+.ts-login-composition h1 em {
+    font-family: var(--ff-accent-font);
+    font-size: 1.06em;
+    font-weight: 400;
+    line-height: .94;
+    letter-spacing: -.09em;
+}
+.ts-login-bloom {
+    position: absolute;
+    z-index: 1;
+    left: 49%;
+    top: 48%;
+    width: clamp(250px, 35vw, 570px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    filter: saturate(.92);
+    animation: ts-bloom-float 8s ease-in-out infinite;
+}
+.ts-login-bloom span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    display: block;
+    width: 10%;
+    height: 43%;
+    transform-origin: 50% 100%;
+    border-radius: 52% 52% 12% 12%;
+    background: linear-gradient(to top, rgba(255,166,94,.94) 0%, rgba(178,226,56,.56) 28%, rgba(55,202,139,.72) 58%, rgba(25,66,32,.04) 100%);
+    filter: blur(10px);
+    opacity: .83;
+    mix-blend-mode: screen;
+}
+.ts-login-bloom span:nth-child(1) { transform: translate(-50%,-100%) rotate(0deg); }
+.ts-login-bloom span:nth-child(2) { transform: translate(-50%,-100%) rotate(20deg); }
+.ts-login-bloom span:nth-child(3) { transform: translate(-50%,-100%) rotate(40deg); }
+.ts-login-bloom span:nth-child(4) { transform: translate(-50%,-100%) rotate(60deg); }
+.ts-login-bloom span:nth-child(5) { transform: translate(-50%,-100%) rotate(80deg); }
+.ts-login-bloom span:nth-child(6) { transform: translate(-50%,-100%) rotate(100deg); }
+.ts-login-bloom span:nth-child(7) { transform: translate(-50%,-100%) rotate(120deg); }
+.ts-login-bloom span:nth-child(8) { transform: translate(-50%,-100%) rotate(140deg); }
+.ts-login-bloom span:nth-child(9) { transform: translate(-50%,-100%) rotate(160deg); }
+.ts-login-bloom span:nth-child(10) { transform: translate(-50%,-100%) rotate(180deg); }
+.ts-login-bloom span:nth-child(11) { transform: translate(-50%,-100%) rotate(200deg); }
+.ts-login-bloom span:nth-child(12) { transform: translate(-50%,-100%) rotate(220deg); }
+.ts-login-bloom span:nth-child(13) { transform: translate(-50%,-100%) rotate(240deg); }
+.ts-login-bloom span:nth-child(14) { transform: translate(-50%,-100%) rotate(260deg); }
+.ts-login-bloom span:nth-child(15) { transform: translate(-50%,-100%) rotate(280deg); }
+.ts-login-bloom span:nth-child(16) { transform: translate(-50%,-100%) rotate(300deg); }
+.ts-login-bloom span:nth-child(17) { transform: translate(-50%,-100%) rotate(320deg); }
+.ts-login-bloom span:nth-child(18) { transform: translate(-50%,-100%) rotate(340deg); }
+.ts-login-bloom i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 25%;
+    aspect-ratio: 1;
+    transform: translate(-50%,-50%);
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffad63 0%, rgba(210,225,103,.92) 22%, rgba(47,179,105,.18) 52%, transparent 72%);
+    filter: blur(7px);
+    box-shadow: 0 0 35px rgba(255,164,93,.38), 0 0 85px rgba(48,192,123,.22);
+}
+.ts-login-bottom {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(210px, 32%) 1fr;
+    align-items: end;
+    gap: 2rem;
+    min-height: 130px;
+    margin-top: 1.3rem;
+}
+.ts-login-note {
+    max-width: 330px;
+    margin: 0 0 .35rem;
+    color: var(--ts-lime);
+    font-family: var(--ff-body-font);
+    font-size: clamp(.63rem, .74vw, .78rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -.025em;
+}
+.ts-login-phrase {
+    justify-self: end;
+    margin: 0 -.015em -.08em 0;
+    color: var(--ts-lime);
+    font-family: var(--ff-accent-font);
+    font-size: clamp(3.4rem, 7.3vw, 7rem);
+    font-weight: 400;
+    font-style: italic;
+    line-height: .82;
+    letter-spacing: -.075em;
+    white-space: nowrap;
+}
+.ts-login-index {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: .8rem;
+    border-top: 1px solid rgba(226,239,197,.13);
+    color: #7e8a68;
+    font-family: var(--ff-label-font);
+    font-size: .58rem;
+    letter-spacing: .12em;
+}
+.ts-login-anchor {
+    height: 1px;
+    scroll-margin-top: 1.5rem;
+}
+.ts-auth-heading {
+    max-width: 720px;
+    margin: 2rem auto 1.2rem;
+    text-align: center;
+}
+.ts-auth-eyebrow {
+    color: var(--ff-lime);
+    font-family: var(--ff-label-font);
+    font-size: .7rem;
+    letter-spacing: .13em;
+}
+.ts-auth-heading h2 {
+    margin: .6rem 0 .4rem;
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    color: var(--ff-text);
+    letter-spacing: -.06em;
+}
+.ts-auth-heading p {
+    color: var(--ff-text-muted);
+    line-height: 1.6;
+    font-size: .98rem;
+}
+.ts-demo-label {
+    margin: 1rem 0 .35rem;
+    color: var(--ff-muted) !important;
+}
+.ts-login-privacy {
+    margin: 1.2rem 0 0;
+    color: var(--ff-muted);
+    font-size: .77rem;
+    line-height: 1.5;
+    text-align: center;
+}
+@keyframes ts-bloom-float {
+    0%,100% { transform: translate(-50%,-50%) rotate(-2deg) scale(.98); }
+    50% { transform: translate(-50%,-51%) rotate(3deg) scale(1.035); }
+}
+@keyframes ts-globe-breathe {
+    0%,100% { opacity: .84; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-3px); }
+}
+@media (max-width: 900px) {
+    .ts-login-canvas {
+        min-height: clamp(700px, 88vh, 860px);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    .ts-login-composition { min-height: 400px; }
+    .ts-login-composition h1 {
+        max-width: 75%;
+        font-size: clamp(4.2rem, 12vw, 7.7rem);
+    }
+    .ts-login-bloom {
+        left: 62%;
+        width: clamp(260px, 47vw, 430px);
+        opacity: .75;
+    }
+    .ts-login-bottom {
+        grid-template-columns: 1fr;
+        gap: 1.3rem;
+    }
+    .ts-login-phrase {
+        justify-self: end;
+        font-size: clamp(3rem, 8.5vw, 5.2rem);
+        white-space: normal;
+        text-align: right;
+    }
+    .ts-login-index { font-size: .52rem; }
+}
+@media (max-width: 600px) {
+    .ts-login-canvas {
+        min-height: 760px;
+        padding: 1.15rem;
+        border-radius: 16px;
+    }
+    .ts-login-brand-mark { width: 36px; height: 36px; flex-basis: 36px; }
+    .ts-login-brand-copy { font-size: .75rem; }
+    .ts-login-brand-copy span { max-width: 190px; font-size: .48rem; }
+    .ts-login-try { min-width: 76px; font-size: .61rem; }
+    .ts-login-globe { width: 30px; height: 30px; font-size: 1.55rem; }
+    .ts-login-composition {
+        align-items: flex-start;
+        min-height: 395px;
+        padding-top: 2.2rem;
+    }
+    .ts-login-composition h1 {
+        max-width: 100%;
+        font-size: clamp(3.8rem, 16vw, 6.2rem);
+    }
+    .ts-login-bloom {
+        left: 65%;
+        top: 58%;
+        width: min(84vw, 390px);
+        opacity: .64;
+    }
+    .ts-login-bottom { min-height: 0; gap: 1.2rem; }
+    .ts-login-note { max-width: 290px; font-size: .62rem; line-height: 1.35; }
+    .ts-login-phrase {
+        font-size: clamp(2.7rem, 12vw, 4.1rem);
+        line-height: .9;
+    }
+    .ts-login-index {
+        margin-top: 1.4rem;
+        font-size: .46rem;
+        letter-spacing: .06em;
+    }
+    .ts-auth-heading { margin-top: 1.3rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .ts-login-bloom, .ts-login-globe { animation: none !important; }
+}

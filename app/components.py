@@ -27,7 +27,7 @@ def render_global_styles():
     """Load the shared presentation stylesheet from app/styles.css."""
     stylesheet_path = Path(__file__).with_name("styles.css")
     css = stylesheet_path.read_text(encoding="utf-8")
-    st.markdown(f"<style>\\n{css}\\n</style>", unsafe_allow_html=True)
+    st.markdown(f"<style>\n{css}\\n</style>", unsafe_allow_html=True)
 
 
 

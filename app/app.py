@@ -84,56 +84,54 @@ def _get_login_credentials():
 
 
 def render_login_screen():
-    """Render a minimalist, poster-like Text Signal landing/login experience."""
+    """Render an attractive login gateway; support an explicitly labelled demo mode."""
     st.markdown(
         """
-        <section class="ts-login-canvas ff-animate-in" aria-labelledby="ts-login-headline">
-          <div class="ts-login-top">
-            <div class="ts-login-brand">
-              <span class="ts-login-brand-mark">TS</span>
-              <span class="ts-login-brand-copy">TEXT SIGNAL<span>AI TEXT DETECTION / RESEARCH CONSOLE</span></span>
-            </div>
-            <div class="ts-login-try">
-              <span class="ts-login-globe" aria-hidden="true">◎</span>
-              <a href="#ts-login-form-anchor">[ TRY NOW ]</a>
-            </div>
-          </div>
-
-          <div class="ts-login-composition">
-            <h1 id="ts-login-headline">We're just<br>reading<br><em>signals</em></h1>
-            <div class="ts-login-bloom" aria-hidden="true">
-              <span></span><span></span><span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span><span></span><span></span>
-              <span></span><span></span><span></span><span></span><span></span><span></span>
-              <i></i>
-            </div>
-          </div>
-
-          <div class="ts-login-bottom">
-            <p class="ts-login-note">WE COMPARE HUMAN AND AI WRITING PATTERNS.<br>THEN WE SHOW THE SIGNALS BEHIND EACH PREDICTION.</p>
-            <p class="ts-login-phrase">and that’s the signal</p>
-          </div>
-          <div class="ts-login-index" aria-hidden="true">LANGUAGE / PATTERNS / EVIDENCE <span>PRG4206</span></div>
-        </section>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        """
-        <div id="ts-login-form-anchor" class="ts-login-anchor"></div>
-        <div class="ts-auth-heading">
-          <div class="ts-auth-eyebrow">RESEARCH ACCESS / 01</div>
-          <h2>Enter the workspace.</h2>
-          <p>Run a text check, compare the saved classifiers, and inspect the evidence behind a prediction.</p>
+        <div class="ff-topline ff-animate-in">
+          <div class="ff-brand"><span class="ff-mark">TS</span><span>TEXT SIGNAL<br><span style="color:#b8c2a4;font-size:.72rem;font-weight:400;">PRG4206 Research Console</span></span></div>
+          <div class="ff-status">RESEARCH ACCESS</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    # The login page also gets the moving ticker; previously it appeared only after sign-in.
+    render_marquee(["TEXT SIGNAL", "DETECT", "COMPARE", "EXPLAIN", "VALIDATE", "UNDERSTAND"])
 
-    # Keep the functional sign-in form centred below the visual landing section.
-    left_space, form_col, right_space = st.columns([1, 1.3, 1], gap="large")
-    with form_col:
+    col_copy, col_form = st.columns([1.15, .85], gap="large")
+    with col_copy:
+        st.markdown('<div class="ff-mini">A machine-learning research workspace</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="ff-login-title ff-animate-in">Read the text.<br><span class="ff-login-accent">Find the signal.</span><span class="ff-login-orbit" aria-hidden="true">✳</span></div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            '<div class="ff-login-copy ff-animate-in ff-delay-2">Compare human-written and AI-generated text using three saved models. Explore the evidence behind a prediction, review benchmark results, and inspect long documents one section at a time.</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+            <div class="ff-hero-foot" style="margin-top:1.6rem;">
+              <span class="ff-chip">01 / Text detection</span>
+              <span class="ff-chip">02 / Model comparison</span>
+              <span class="ff-chip">03 / Explainability</span>
+            </div>
+            <div style="height:1px;background:rgba(226,239,197,.16);margin:2rem 0 1rem;"></div>
+            <div class="ff-mini">Built for PRG4206 · Individual Machine Learning Assignment</div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with col_form:
+        st.markdown(
+            """
+            <div class="ff-login-welcome ff-login-panel ff-animate-in ff-delay-3" style="margin-bottom:1rem;">
+              <div class="ff-mini">WELCOME BACK</div>
+              <h3 style="font-size:2rem;line-height:1.05;margin:.55rem 0 .45rem;">Your workspace,<br>ready when you are.</h3>
+              <p style="margin:0;">Sign in to continue to the detection dashboard.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         expected_user, expected_password = _get_login_credentials()
         with st.form("text_signal_login", clear_on_submit=False):
             username = st.text_input("Email or username", placeholder="you@example.com")
@@ -158,7 +156,7 @@ def render_login_screen():
 
         if not (expected_user and expected_password):
             st.markdown(
-                '<p class="ff-mini ts-demo-label">DEMO ENVIRONMENT · NO ACCOUNT SETUP</p>',
+                '<p class="ff-mini" style="margin:.7rem 0 .35rem;color:#a0a990;">DEMO ENVIRONMENT · NO ACCOUNT SETUP</p>',
                 unsafe_allow_html=True,
             )
             if st.button("Explore demo workspace  ↗", use_container_width=True, key="text_signal_demo_access"):
@@ -171,7 +169,7 @@ def render_login_screen():
             )
 
         st.markdown(
-            '<div class="ts-login-privacy">No personal document is saved by this login screen.</div>',
+            '<div class="ff-mini" style="margin-top:1rem;">No personal document is saved by this login screen.</div>',
             unsafe_allow_html=True,
         )
 

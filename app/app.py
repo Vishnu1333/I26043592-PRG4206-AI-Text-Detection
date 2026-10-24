@@ -170,7 +170,7 @@ def render_login_screen():
 
 def render_sidebar():
     """Render the compact app navigation, model selector, and sign-out control."""
-    brand_col, nav_col, model_col, logout_col = st.columns([1.2, 5.0, 1.65, .75])
+    brand_col, nav_col, model_col, logout_col = st.columns([1.25, 5.0, 1.55, .65])
     with brand_col:
         st.markdown(
             """
@@ -210,7 +210,7 @@ def render_sidebar():
             st.caption("ACTIVE MODEL")
 
     with logout_col:
-        if st.button("Log out", key="text_signal_logout", use_container_width=True):
+        if st.button("Exit", key="text_signal_logout", use_container_width=True, help="Sign out of the research workspace"):
             st.session_state["text_signal_authenticated"] = False
             st.session_state.pop("text_signal_access_mode", None)
             st.rerun()

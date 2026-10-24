@@ -74,6 +74,42 @@ def render_feature_card(
     )
 
 
+def render_page_heading(eyebrow: str, title: str, description: str) -> None:
+    """Render a consistent editorial heading for interior workspace pages."""
+    st.markdown(
+        f"""
+        <header class="ff-page-heading">
+          <div class="ff-page-heading__eyebrow">{escape(str(eyebrow))}</div>
+          <h2 class="ff-page-heading__title">{escape(str(title))}</h2>
+          <p class="ff-page-heading__description">{escape(str(description))}</p>
+        </header>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_footer() -> None:
+    """Render a small project footer without inventing contact or signup flows."""
+    st.markdown(
+        """
+        <footer class="ff-footer">
+          <div>
+            <div class="ff-footer__brand">TEXT SIGNAL <span style="color:var(--ff-lime);">✳</span></div>
+            <div class="ff-footer__meta">PRG4206 · Machine Learning Research Prototype</div>
+          </div>
+          <div class="ff-footer__meta">
+            Benchmark estimates are not proof of authorship.<br>
+            Use independent human review for consequential decisions.
+          </div>
+          <div class="ff-footer__meta">
+            <a href="https://github.com/Vishnu1333/I26043592-PRG4206-AI-Text-Detection" target="_blank" rel="noreferrer">Source repository ↗</a>
+          </div>
+        </footer>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 
 
 # ── Header & Banner ──────────────────────────────────────────────────────────
@@ -86,8 +122,23 @@ def render_global_styles():
 
 
 
-def render_header():
-    """Render the editorial research hero and CSS-only ticker."""
+def render_header(compact: bool = False) -> None:
+    """Render either the editorial landing hero or a compact interior-page header."""
+    if compact:
+        st.markdown(
+            """
+            <div class="ff-inner-header">
+              <div class="ff-inner-header__brand">
+                <span class="ff-mark">TS</span>
+                <span>TEXT SIGNAL <span class="ff-inner-header__slash">/</span> RESEARCH WORKSPACE</span>
+              </div>
+              <div class="ff-inner-header__meta">LANGUAGE · PATTERNS · EVIDENCE</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        return
+
     headline = f"Words leave {highlight_markup('signals.')}<br><em>We make them visible.</em>"
     st.markdown(
         f"""

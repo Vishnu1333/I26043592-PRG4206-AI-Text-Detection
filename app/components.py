@@ -295,64 +295,57 @@ def render_header():
 # ── Prediction Result Display ────────────────────────────────────────────────
 
 def render_prediction_result(result: Dict[str, Any]):
-    """Render a card displaying the prediction label, confidence, and model info."""
+    """Render a high-contrast glass card for the model's actual prediction."""
     label = result.get("label", "Unknown")
     confidence = float(result.get("confidence", 0.0))
     model = result.get("model", "Unknown")
 
     is_ai = label == "AI-Generated"
-    bg_color = "#fef2f2" if is_ai else "#f0fdf4"
-    border_color = "#ef4444" if is_ai else "#22c55e"
-    text_color = "#b91c1c" if is_ai else "#15803d"
-    icon = "🤖" if is_ai else "✍️"
-
+    bg_color = "linear-gradient(145deg, rgba(71,31,51,.92), rgba(27,20,38,.96))" if is_ai else "linear-gradient(145deg, rgba(17,58,61,.92), rgba(15,31,43,.96))"
+    border_color = "rgba(251,113,133,.60)" if is_ai else "rgba(74,222,173,.54)"
+    text_color = "#fda4af" if is_ai else "#6ee7b7"
+    icon = "✦" if is_ai else "◎"
     ai_prob = confidence if is_ai else (1.0 - confidence)
     human_prob = 1.0 - ai_prob
 
     st.markdown(
         f"""
-        <div style='
-            background-color: {bg_color};
-            border: 2px solid {border_color};
-            border-radius: 12px;
-            padding: 22px 28px;
-            margin: 15px 0 20px 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-        '>
-            <div style='display: flex; justify-content: space-between; align-items: center;'>
-                <div>
-                    <span style='font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: {text_color};'>
-                        Classification Verdict
-                    </span>
-                    <h2 style='color: {text_color}; margin: 4px 0 6px 0; font-size: 2.0rem; font-weight: 800;'>
-                        {icon} {label}
-                    </h2>
-                    <p style='color: #64748b; font-size: 0.95rem; margin: 0;'>
-                        Model: <b>{model}</b>
-                    </p>
-                </div>
-                <div style='text-align: right;'>
-                    <span style='font-size: 0.85rem; color: #64748b;'>Confidence Score</span>
-                    <h1 style='color: {text_color}; font-size: 2.5rem; margin: 0; font-weight: 800;'>
-                        {confidence * 100:.1f}%
-                    </h1>
-                </div>
+        <div style="background:{bg_color};border:1px solid {border_color};border-radius:18px;
+                    padding:23px 26px;margin:18px 0 20px 0;
+                    box-shadow:0 16px 36px rgba(0,0,0,.18);">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
+            <div>
+              <div style="font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:{text_color};">
+                Model assessment
+              </div>
+              <div style="color:#f5f7ff;font-size:clamp(1.55rem,3vw,2.1rem);font-weight:800;letter-spacing:-.035em;margin:7px 0 5px;">
+                {icon} {label}
+              </div>
+              <div style="font-size:.86rem;color:#b5c4da;">Evaluated by <b style="color:#eaf0fc;">{model}</b></div>
             </div>
+            <div style="text-align:left;min-width:130px;background:rgba(255,255,255,.045);
+                        border:1px solid rgba(255,255,255,.11);border-radius:14px;padding:12px 16px;">
+              <div style="font-size:.72rem;color:#b5c4da;margin-bottom:4px;">Model confidence</div>
+              <div style="font-size:2.05rem;line-height:1.2;font-weight:800;color:{text_color};">{confidence * 100:.1f}%</div>
+            </div>
+          </div>
+          <div style="margin-top:15px;font-size:.78rem;color:#c2cde0;line-height:1.6;">
+            This label reflects the model's learned patterns in HC3. It is not proof of authorship.
+          </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    # Class probability split bars
     c1, c2 = st.columns(2)
     with c1:
-        st.markdown(f"**Human Probability**: `{human_prob * 100:.1f}%`")
+        st.markdown(f"**Human probability** · {human_prob * 100:.1f}%")
         st.progress(human_prob)
     with c2:
-        st.markdown(f"**AI Probability**: `{ai_prob * 100:.1f}%`")
+        st.markdown(f"**AI probability** · {ai_prob * 100:.1f}%")
         st.progress(ai_prob)
 
-    st.caption("⚠️ *Model confidence is a probabilistic estimate, not definitive proof of authorship.*")
+    st.caption("Probabilities are model estimates and may be wrong, especially for short or out-of-domain passages.")
 
 
 # ── Text Statistics ──────────────────────────────────────────────────────────

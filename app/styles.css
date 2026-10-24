@@ -1148,8 +1148,9 @@ body { text-rendering: optimizeLegibility; }
     color: currentColor !important;
     fill: currentColor !important;
 }
-[data-testid="stButton"] button,
-[data-testid="stButton"] button * {
+/* Dark ink belongs only on lime actions; never force it onto all Streamlit buttons. */
+.st-key-text_signal_demo_access button,
+.st-key-text_signal_demo_access button * {
     color: var(--ff-ink) !important;
 }
 [data-testid="stButton"] button {
@@ -1546,4 +1547,41 @@ body { text-rendering: optimizeLegibility; }
         font-size: .68rem !important;
         white-space: normal !important;
     }
+}
+
+
+/* Final contrast repair: keep secondary navigation labels light on the dark canvas. */
+/* Explicit text colors win over the earlier login-specific button rules. */
+[data-testid="stButton"] button[kind="secondary"],
+[data-testid="stButton"] button[data-testid="baseButton-secondary"] {
+    color: #eff2e7 !important;
+}
+[data-testid="stButton"] button[kind="secondary"] p,
+[data-testid="stButton"] button[kind="secondary"] span,
+[data-testid="stButton"] button[kind="secondary"] div,
+[data-testid="stButton"] button[data-testid="baseButton-secondary"] p,
+[data-testid="stButton"] button[data-testid="baseButton-secondary"] span,
+[data-testid="stButton"] button[data-testid="baseButton-secondary"] div {
+    color: #eff2e7 !important;
+}
+[data-testid="stButton"] button[kind="primary"],
+[data-testid="stButton"] button[data-testid="baseButton-primary"] {
+    color: var(--ff-ink) !important;
+}
+[data-testid="stButton"] button[kind="primary"] p,
+[data-testid="stButton"] button[kind="primary"] span,
+[data-testid="stButton"] button[kind="primary"] div,
+[data-testid="stButton"] button[data-testid="baseButton-primary"] p,
+[data-testid="stButton"] button[data-testid="baseButton-primary"] span,
+[data-testid="stButton"] button[data-testid="baseButton-primary"] div {
+    color: var(--ff-ink) !important;
+}
+/* Exit remains legible if Streamlit renders it as a secondary button. */
+.st-key-text_signal_logout button {
+    color: #171b0c !important;
+}
+.st-key-text_signal_logout button p,
+.st-key-text_signal_logout button span,
+.st-key-text_signal_logout button div {
+    color: #171b0c !important;
 }

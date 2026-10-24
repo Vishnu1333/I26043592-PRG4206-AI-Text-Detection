@@ -3,6 +3,7 @@ app/components.py — Reusable, high-fidelity Streamlit UI components.
 PRG4206 | AI-Generated Text Detection System
 """
 
+from html import escape
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -21,6 +22,60 @@ from app.ui_utils import (
 from src.config import FIGURES_DIR, METRICS_DIR
 
 
+def highlight_markup(text: str) -> str:
+    """Return escaped inline text highlighted with the shared lime treatment."""
+    return f'<span class="ff-highlight">{escape(text)}</span>'
+
+
+def render_marquee(items: Optional[List[str]] = None) -> None:
+    """Render a lightweight, accessible, CSS-only looping ticker."""
+    labels = items or [
+        "Detect",
+        "Compare",
+        "Explain",
+        "Inspect",
+        "Validate",
+        "Understand",
+    ]
+    if not labels:
+        return
+    ticker = "  ✳  ".join(escape(str(item)) for item in labels) + "  ✳  "
+    st.markdown(
+        f"""
+        <div class="ff-marquee" aria-label="Project capabilities">
+          <div class="ff-marquee-track" aria-hidden="true">
+            <span>{ticker}</span>
+            <span>{ticker}</span>
+          </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_feature_card(
+    number: str,
+    title: str,
+    description: str,
+    *,
+    accent: bool = False,
+) -> None:
+    """Render a reusable research feature card using shared design tokens."""
+    variant_class = "ff-feature-card ff-feature-card--accent" if accent else "ff-feature-card"
+    st.markdown(
+        f"""
+        <article class="{variant_class}">
+          <div class="ff-feature-card__number">{escape(str(number))}</div>
+          <h3>{escape(str(title))}</h3>
+          <p>{escape(str(description))}</p>
+        </article>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+
+
 # ── Header & Banner ──────────────────────────────────────────────────────────
 
 def render_global_styles():
@@ -32,29 +87,25 @@ def render_global_styles():
 
 
 def render_header():
-    """Render the project masthead and Flashform-inspired hero."""
+    """Render the editorial research hero and CSS-only ticker."""
+    headline = f"Words leave {highlight_markup('signals.')}<br><em>We make them visible.</em>"
     st.markdown(
-        """
-        <div class="ff-hero">
+        f"""
+        <section class="ff-hero" aria-labelledby="ff-main-heading">
           <div class="ff-kicker">Language · Patterns · Evidence</div>
           <div class="ff-orbit" aria-hidden="true">✳</div>
-          <h1>Words leave signals.<br><em>We make them visible.</em></h1>
+          <h1 id="ff-main-heading">{headline}</h1>
           <p>Explore how three machine-learning models respond to a passage, compare their benchmark performance, and inspect the signals behind each prediction.</p>
           <div class="ff-hero-foot">
             <span class="ff-chip">79,331 cleaned HC3 samples</span>
             <span class="ff-chip">3 evaluated models</span>
             <span class="ff-chip">Human + AI text</span>
           </div>
-        </div>
-        <div class="ff-marquee" aria-label="Project capabilities">
-          <div class="ff-marquee-track">
-            <span>Detect ✳ Compare ✳ Explain ✳ Inspect ✳ Validate ✳ Understand ✳ </span>
-            <span>Detect ✳ Compare ✳ Explain ✳ Inspect ✳ Validate ✳ Understand ✳ </span>
-          </div>
-        </div>
+        </section>
         """,
         unsafe_allow_html=True,
     )
+    render_marquee()
 
 
 # ── Prediction Result Display ────────────────────────────────────────────────

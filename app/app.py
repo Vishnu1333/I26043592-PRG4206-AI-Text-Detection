@@ -213,7 +213,7 @@ def render_sidebar():
                 key="text_signal_active_model",
                 label_visibility="collapsed",
             )
-            st.caption("ACTIVE MODEL")
+            # Keep the header compact; the selectbox retains its accessible "Active model" label.
 
     with logout_col:
         if st.button("Exit", key="text_signal_logout", use_container_width=True, help="Sign out of the research workspace"):

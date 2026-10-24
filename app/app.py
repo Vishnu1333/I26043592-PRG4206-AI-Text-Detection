@@ -221,7 +221,6 @@ def render_sidebar():
             st.session_state.pop("text_signal_access_mode", None)
             st.rerun()
 
-    st.markdown('<div style="height:1px;background:rgba(226,239,197,.16);margin:.25rem 0 1.2rem;"></div>', unsafe_allow_html=True)
     return nav_page, selected_model
 
 

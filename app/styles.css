@@ -1289,9 +1289,6 @@ body { text-rendering: optimizeLegibility; }
     display: none !important;
 }
 /* Streamlit's radio glyph becomes a clean text pill; the selected state remains visible on the label. */
-[data-testid="stRadio"] [role="radiogroup"] > label > div > div:first-child {
-    display: none !important;
-}
 [data-testid="stRadio"] [role="radiogroup"] > label {
     gap: 0 !important;
     min-height: 42px !important;
@@ -1327,4 +1324,37 @@ body { text-rendering: optimizeLegibility; }
     [data-testid="stRadio"] [role="radiogroup"] > label {
         padding: .45rem .6rem !important;
     }
+}
+
+
+/* Navigation labels fix: hide only the radio icon, never the label text. */
+/* Remove Streamlit's radio glyph while preserving the label/accessible input. */
+[data-testid="stRadio"] [role="radiogroup"] > label > input + div {
+    display: none !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label > div {
+    display: flex !important;
+    align-items: center !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label [data-testid="stMarkdownContainer"],
+[data-testid="stRadio"] [role="radiogroup"] > label [data-testid="stMarkdownContainer"] p {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: #d7dfc8 !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] > label:has(input:checked) [data-testid="stMarkdownContainer"] p {
+    color: var(--ff-ink) !important;
+}
+/* Keep the navigation row free of extra separators underneath. */
+[data-testid="stHorizontalBlock"]:has([data-testid="stRadio"]) {
+    border-bottom: 0 !important;
 }

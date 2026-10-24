@@ -212,12 +212,12 @@ def render_global_styles():
         .ff-section-label {font-family:'DM Mono',monospace;color:var(--ff-lime);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.35rem;}
         .ff-lime-card {background:var(--ff-lime);color:var(--ff-ink);border-radius:18px;padding:1.25rem 1.35rem;}
         .ff-lime-card h3,.ff-lime-card p,.ff-lime-card strong {color:var(--ff-ink) !important;}
-        form[data-testid="stForm"] {background:var(--ff-lime);border:0;border-radius:22px;padding:1.25rem 1.25rem .85rem;}
-        form[data-testid="stForm"] label, form[data-testid="stForm"] p {color:var(--ff-ink) !important;}
-        form[data-testid="stForm"] [data-baseweb="input"] > div {background:#f6f8ed;border-color:rgba(23,27,12,.16);}
-        form[data-testid="stForm"] input {color:var(--ff-ink) !important;}
-        form[data-testid="stForm"] button {background:var(--ff-ink);border-color:var(--ff-ink);color:var(--ff-lime);}
-        form[data-testid="stForm"] button:hover {background:#283016;border-color:#283016;color:var(--ff-lime-bright);}
+        [data-testid="stForm"] {background:var(--ff-lime);border:0;border-radius:22px;padding:1.25rem 1.25rem .85rem;}
+        [data-testid="stForm"] label, [data-testid="stForm"] p {color:var(--ff-ink) !important;}
+        [data-testid="stForm"] [data-baseweb="input"] > div {background:#f6f8ed;border-color:rgba(23,27,12,.16);}
+        [data-testid="stForm"] input {color:var(--ff-ink) !important;}
+        [data-testid="stForm"] button {background:var(--ff-ink);border-color:var(--ff-ink);color:var(--ff-lime);}
+        [data-testid="stForm"] button:hover {background:#283016;border-color:#283016;color:var(--ff-lime-bright);}
         .ff-login-title {font-family:'Space Grotesk',sans-serif;font-size:clamp(2.8rem,6.8vw,6.4rem);font-weight:700;letter-spacing:-.075em;line-height:.9;color:var(--ff-lime);margin:.4rem 0 1.25rem;}
         .ff-login-title span {color:var(--ff-text);}
         .ff-login-copy {max-width:510px;color:#c8d0b8;font-size:1.06rem;line-height:1.7;}
@@ -265,40 +265,41 @@ def render_header():
 # ── Prediction Result Display ────────────────────────────────────────────────
 
 def render_prediction_result(result: Dict[str, Any]):
-    """Render a restrained Apple-inspired result panel using the actual prediction."""
+    """Render an acid-lime/dark-green result card using the model's actual output."""
     label = result.get("label", "Unknown")
     confidence = float(result.get("confidence", 0.0))
     model = result.get("model", "Unknown")
     is_ai = label == "AI-Generated"
-    accent = "#b42318" if is_ai else "#087443"
-    soft_bg = "#fff5f5" if is_ai else "#f0faf5"
-    soft_border = "#f3c5c5" if is_ai else "#bfe8d2"
-    icon = "✦" if is_ai else "✓"
+    accent = "#b1dd40" if is_ai else "#c8f45c"
+    panel = "#262515" if is_ai else "#1a2510"
+    icon = "✳" if is_ai else "↗"
     ai_prob = confidence if is_ai else (1.0 - confidence)
     human_prob = 1.0 - ai_prob
 
     st.markdown(
         f"""
-        <div style="background:{soft_bg};border:1px solid {soft_border};border-radius:18px;
-                    padding:22px 25px;margin:18px 0 20px 0;">
+        <div style="background:linear-gradient(135deg,{panel},#171d0b);
+                    border:1px solid rgba(177,221,64,.36);border-radius:18px;
+                    padding:22px 24px;margin:18px 0 18px;
+                    box-shadow:0 12px 32px rgba(0,0,0,.12);">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
             <div>
-              <div style="font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:650;color:{accent};">
-                Model assessment
+              <div style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:{accent};">
+                MODEL OUTPUT / CLASSIFICATION
               </div>
-              <div style="color:#1d1d1f;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;letter-spacing:-.04em;margin:7px 0 5px;">
+              <div style="font-family:'Space Grotesk',sans-serif;color:#f0f3e7;font-size:clamp(1.55rem,3vw,2.2rem);
+                          font-weight:700;letter-spacing:-.055em;margin:8px 0 5px;">
                 {icon} {label}
               </div>
-              <div style="font-size:.86rem;color:#6e6e73;">Evaluated by <b style="color:#1d1d1f;">{model}</b></div>
+              <div style="font-size:.86rem;color:#a0a990;">Evaluated by <b style="color:#e9eddc;">{model}</b></div>
             </div>
-            <div style="text-align:left;min-width:135px;background:rgba(255,255,255,.82);
-                        border:1px solid rgba(0,0,0,.055);border-radius:14px;padding:12px 16px;">
-              <div style="font-size:.72rem;color:#6e6e73;margin-bottom:4px;">Model confidence</div>
-              <div style="font-size:2rem;line-height:1.2;font-weight:700;color:{accent};">{confidence * 100:.1f}%</div>
+            <div style="background:#b1dd40;border-radius:15px;padding:13px 17px;min-width:140px;">
+              <div style="font-family:'DM Mono',monospace;font-size:.66rem;color:#31391c;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">Confidence</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1.12;font-weight:700;color:#171b0c;">{confidence * 100:.1f}%</div>
             </div>
           </div>
-          <div style="margin-top:14px;font-size:.79rem;color:#6e6e73;line-height:1.6;">
-            This label reflects learned patterns in HC3. It is not proof of authorship.
+          <div style="margin-top:15px;font-size:.79rem;color:#aeb79d;line-height:1.6;">
+            This is a model estimate based on learned HC3 patterns, not proof of who authored the passage.
           </div>
         </div>
         """,
@@ -313,7 +314,7 @@ def render_prediction_result(result: Dict[str, Any]):
         st.markdown(f"**AI probability** · {ai_prob * 100:.1f}%")
         st.progress(ai_prob)
 
-    st.caption("Probabilities are model estimates and may be wrong, especially for short or out-of-domain passages.")
+    st.caption("Results may be wrong for short passages, formal human writing, or material from unfamiliar domains.")
 
 
 # ── Text Statistics ──────────────────────────────────────────────────────────
@@ -371,40 +372,40 @@ def render_explanation_card(exps: List[Dict[str, Any]], model_name: str = "Linea
 # ── Document Analysis Components ─────────────────────────────────────────────
 
 def render_document_summary(analysis: Dict[str, Any]):
-    """Render a clean light document-estimate panel."""
+    """Render the document-level estimate in the same Flashform-inspired visual style."""
     overall = analysis["overall_prediction"]
     conf = analysis["overall_confidence"]
     is_ai = overall == "AI-Generated"
-    bg = "#fff5f5" if is_ai else "#f0faf5"
-    border = "#f3c5c5" if is_ai else "#bfe8d2"
-    color = "#b42318" if is_ai else "#087443"
-    icon = "✦" if is_ai else "✓"
+    accent = "#b1dd40"
+    panel = "#282515" if is_ai else "#1b2410"
+    icon = "✳" if is_ai else "↗"
 
     st.markdown(
         f"""
-        <div style="background:{bg};border:1px solid {border};border-radius:18px;
-                    padding:22px 25px;margin:16px 0 22px 0;">
+        <div style="background:linear-gradient(135deg,{panel},#171d0b);
+                    border:1px solid rgba(177,221,64,.36);border-radius:18px;
+                    padding:22px 24px;margin:16px 0 20px;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
             <div>
-              <div style="font-size:.72rem;font-weight:650;letter-spacing:.12em;text-transform:uppercase;color:{color};">
-                Document estimate
+              <div style="font-family:'DM Mono',monospace;font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:{accent};">
+                DOCUMENT OUTPUT / ESTIMATE
               </div>
-              <div style="color:#1d1d1f;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;letter-spacing:-.04em;margin:7px 0 5px;">
+              <div style="font-family:'Space Grotesk',sans-serif;color:#f0f3e7;font-size:clamp(1.55rem,3vw,2.2rem);
+                          font-weight:700;letter-spacing:-.055em;margin:8px 0 5px;">
                 {icon} {overall}
               </div>
-              <div style="font-size:.86rem;color:#6e6e73;">
-                File <b style="color:#1d1d1f;">{analysis.get('filename', 'document')}</b>
-                &nbsp;·&nbsp; Model <b style="color:#1d1d1f;">{analysis.get('model_used', 'Linear SVM')}</b>
+              <div style="font-size:.86rem;color:#a0a990;">
+                File <b style="color:#e9eddc;">{analysis.get('filename', 'document')}</b>
+                &nbsp;·&nbsp; Model <b style="color:#e9eddc;">{analysis.get('model_used', 'Linear SVM')}</b>
               </div>
             </div>
-            <div style="background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.055);
-                        border-radius:14px;padding:12px 16px;min-width:145px;">
-              <div style="font-size:.72rem;color:#6e6e73;margin-bottom:4px;">Aggregate confidence</div>
-              <div style="font-size:2rem;line-height:1.2;font-weight:700;color:{color};">{conf * 100:.1f}%</div>
+            <div style="background:{accent};border-radius:15px;padding:13px 17px;min-width:145px;">
+              <div style="font-family:'DM Mono',monospace;font-size:.66rem;color:#31391c;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px;">Confidence</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:2rem;line-height:1.12;font-weight:700;color:#171b0c;">{conf * 100:.1f}%</div>
             </div>
           </div>
-          <div style="margin-top:14px;font-size:.79rem;color:#6e6e73;line-height:1.6;">
-            Estimate aggregated from chunk-level predictions; not independently validated as document-level accuracy.
+          <div style="margin-top:15px;font-size:.79rem;color:#aeb79d;line-height:1.6;">
+            Estimated by aggregating chunk predictions. This is not an independently validated document-level benchmark.
           </div>
         </div>
         """,

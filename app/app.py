@@ -26,10 +26,13 @@ from app.components import (
     render_document_summary,
     render_document_visualizations,
     render_explanation_card,
+    render_feature_card,
+    render_footer,
     render_global_styles,
     render_header,
     render_metrics_dashboard,
     render_methodology_tab,
+    render_page_heading,
     render_prediction_result,
     render_text_stats,
     render_xai_deep_dive,
@@ -223,10 +226,10 @@ def render_sidebar():
 
 def page_dashboard_overview(selected_model: str):
     """Render the first-screen dashboard summary after login."""
-    st.markdown('<div class="ff-section-label">00 / OVERVIEW</div>', unsafe_allow_html=True)
-    st.markdown("### A quick read of the system.")
-    st.markdown(
-        "An at-a-glance view of the benchmark, the three saved classifiers, and the tools available in this workspace."
+    render_page_heading(
+        "00 / OVERVIEW",
+        "A quick read of the system.",
+        "An at-a-glance view of the benchmark, the three saved classifiers, and the tools available in this workspace.",
     )
 
     k1, k2, k3, k4 = st.columns(4)
@@ -248,18 +251,11 @@ def page_dashboard_overview(selected_model: str):
         ]
         for col, (number, name, accuracy, f1, detail) in zip(model_cols, model_cards):
             with col:
-                st.markdown(
-                    f"""
-                    <div style="height:100%;min-height:200px;background:#1b2210;border:1px solid rgba(226,239,197,.16);
-                                border-radius:17px;padding:16px 15px;box-shadow:0 10px 24px rgba(0,0,0,.09);">
-                      <div style="font-family:'DM Mono',monospace;color:#b1dd40;font-size:.67rem;letter-spacing:.12em;">MODEL {number}</div>
-                      <div style="font-family:'Space Grotesk',sans-serif;color:#eff2e7;font-size:1.08rem;line-height:1.15;font-weight:700;letter-spacing:-.04em;margin:14px 0 10px;">{name}</div>
-                      <div style="font-family:'Space Grotesk',sans-serif;color:#b1dd40;font-size:1.85rem;font-weight:700;letter-spacing:-.06em;">{accuracy}</div>
-                      <div style="font-family:'DM Mono',monospace;color:#dbe7c4;font-size:.72rem;margin-top:3px;">{f1}</div>
-                      <div style="font-size:.76rem;color:#a0a990;line-height:1.45;margin-top:14px;">{detail}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
+                render_feature_card(
+                    f"MODEL {number} · {accuracy} ACCURACY",
+                    name,
+                    f"{f1} · {detail}",
+                    accent=(number == "01"),
                 )
     with right:
         st.markdown(
@@ -299,27 +295,17 @@ def page_dashboard_overview(selected_model: str):
     ]
     for col, (number, title, description) in zip(route_cols, routes):
         with col:
-            st.markdown(
-                f"""
-                <div style="border-top:2px solid #b1dd40;padding-top:12px;">
-                  <div style="font-family:'DM Mono',monospace;font-size:.67rem;color:#b1dd40;">{number}</div>
-                  <div style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#eff2e7;margin:.45rem 0;">{title}</div>
-                  <div style="font-size:.78rem;line-height:1.45;color:#a0a990;">{description}</div>
-                </div>
-                """,
-                unsafe_allow_html=True,
-            )
+            render_feature_card(number, title, description)
 
 
 # ── Page 1: Home / Detection (Single Text Input) ──────────────────────────────
 
 def page_home_detection(selected_model: str):
     """Render the primary detection workflow in the Flashform-inspired layout."""
-    st.markdown('<div class="ff-section-label">01 / DETECTION WORKSPACE</div>', unsafe_allow_html=True)
-    st.markdown("### Every passage has a pattern.")
-    st.write(
-        "Test a passage against the selected model, then examine the output and its strongest signals. "
-        "The classification is a research estimate—not proof of authorship."
+    render_page_heading(
+        "01 / DETECTION WORKSPACE",
+        "Every passage has a pattern.",
+        "Test a passage against the selected model, then examine the output and its strongest signals. The classification is a research estimate—not proof of authorship.",
     )
 
     k1, k2, k3 = st.columns(3)
@@ -419,12 +405,10 @@ def page_home_detection(selected_model: str):
 
 def page_document_analysis(selected_model: str):
     """Render document upload, multi-chunk segmentation, and document-level aggregation."""
-    st.markdown('<div class="ff-section-label">02 / DOCUMENT WORKSPACE</div>', unsafe_allow_html=True)
-    st.markdown("### Read beyond the first line.")
-    st.write(
-         "Upload an academic essay, report, or article (`.txt`, `.pdf`, `.docx`). "
-        "The document will be segmented into coherent paragraphs, analyzed chunk-by-chunk, "
-        "and aggregated into a document-level estimate."
+    render_page_heading(
+        "02 / DOCUMENT WORKSPACE",
+        "Read beyond the first line.",
+        "Upload an academic essay, report, or article (.txt, .pdf, .docx). The document will be segmented into coherent paragraphs, analyzed chunk-by-chunk, and aggregated into a document-level estimate.",
     )
 
     # File uploader
@@ -509,22 +493,25 @@ def main():
 
     if not st.session_state["text_signal_authenticated"]:
         render_login_screen()
+        render_footer()
         return
 
     nav_page, selected_model = render_sidebar()
-    render_header()
+    render_header(compact=(nav_page != "Overview"))
 
     if selected_model is None:
         st.warning("Please ensure the saved model files exist in the models folder before running inference.")
         render_disclaimer()
+        render_footer()
         return
 
-    # Small contextual strip under the hero, styled in the acid-lime palette.
-    access_mode = st.session_state.get("text_signal_access_mode", "Configured account")
-    st.markdown(
-        f'<div class="ff-band"><strong>Workspace ready.</strong><p>Access mode: {access_mode} &nbsp; · &nbsp; Active model: {selected_model}. Select a section above to explore the detector.</p></div>',
-        unsafe_allow_html=True,
-    )
+    # Keep the contextual welcome strip on the Overview page only.
+    if nav_page == "Overview":
+        access_mode = st.session_state.get("text_signal_access_mode", "Configured account")
+        st.markdown(
+            f'<div class="ff-band"><strong>Workspace ready.</strong><p>Access mode: {access_mode} &nbsp; · &nbsp; Active model: {selected_model}. Select a section above to explore the detector.</p></div>',
+            unsafe_allow_html=True,
+        )
 
     if nav_page == "Overview":
         page_dashboard_overview(selected_model)
@@ -540,6 +527,7 @@ def main():
         render_methodology_tab()
 
     render_disclaimer()
+    render_footer()
 
 
 if __name__ == "__main__":

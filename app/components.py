@@ -437,10 +437,10 @@ def render_chunk_deep_dive(analysis: Dict[str, Any]):
 
 def render_metrics_dashboard():
     """Render a clearer, decision-focused dashboard for the verified HC3 benchmark."""
-    st.markdown("## 📊 Model Performance Dashboard")
-    st.caption(
-        "Held-out evaluation on 11,900 HC3 answer samples · 7,963 human-written · "
-        "3,937 AI-generated · Same test examples for all models"
+    render_page_heading(
+        "03 / BENCHMARK RESULTS",
+        "Model performance.",
+        "Held-out evaluation on 11,900 HC3 answer samples: 7,963 human-written and 3,937 AI-generated. All models use the same test examples.",
     )
 
     metrics_df = load_model_metrics()
@@ -648,8 +648,11 @@ def render_metrics_dashboard():
 
 def render_xai_deep_dive():
     """Render explainability deep dive tab with SHAP plots and methodology notes."""
-    st.markdown("### 🔍 Explainable AI (XAI) Deep Dive")
-    st.caption("Unpacking model decision mechanics through global and local feature attribution.")
+    render_page_heading(
+        "04 / EXPLAINABILITY",
+        "How does the model decide?",
+        "Explore global feature attribution and local text signals without treating a prediction as proof of authorship.",
+    )
 
     tab_shap, tab_linear = st.tabs(["🌳 XGBoost Stylometric SHAP", "📐 Linear Model TF-IDF Coefficients"])
 
@@ -680,7 +683,11 @@ def render_xai_deep_dive():
 
 def render_methodology_tab():
     """Render academic methodology and project context."""
-    st.markdown("### 📚 Methodology & Research Framework")
+    render_page_heading(
+        "05 / RESEARCH METHOD",
+        "The study behind the score.",
+        "Review the HC3 benchmark, data-splitting controls, calibration choices, and documented limitations.",
+    )
     st.markdown(
         """
         #### 1. Research Problem & Benchmark Dataset

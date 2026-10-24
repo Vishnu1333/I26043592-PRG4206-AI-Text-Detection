@@ -1170,3 +1170,89 @@ body { text-rendering: optimizeLegibility; }
     .ff-login-welcome { padding: 1.1rem !important; }
     [data-testid="stForm"] { padding: .9rem !important; }
 }
+
+
+/* Final input-border fix: put the border on the full BaseWeb control, including the password eye. */
+[data-testid="stForm"] [data-testid="stTextInput"],
+[data-testid="stForm"] [data-testid="stTextInput"] > div {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] {
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 3rem !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    background: #111606 !important;
+    border: 1px solid #465332 !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+[data-testid="stForm"] [data-baseweb="input"]:focus-within {
+    border-color: var(--ff-lime) !important;
+    box-shadow: 0 0 0 2px rgba(177,221,64,.16) !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] > div {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    min-height: 2.9rem !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    overflow: hidden !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] input {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+    border: 0 !important;
+    outline: none !important;
+    background: transparent !important;
+    padding-left: 1rem !important;
+    padding-right: .65rem !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] button {
+    flex: 0 0 2.8rem !important;
+    width: 2.8rem !important;
+    min-width: 2.8rem !important;
+    min-height: 2.9rem !important;
+    height: auto !important;
+    align-self: stretch !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 10px 10px 0 !important;
+    background: transparent !important;
+    color: #a0a990 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] button:hover {
+    background: rgba(177,221,64,.09) !important;
+    color: var(--ff-lime-bright) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] button svg {
+    color: currentColor !important;
+    fill: currentColor !important;
+}
+[data-testid="stForm"] [data-testid="stFormSubmitButton"],
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] button {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}

@@ -7,6 +7,8 @@ Run via:
 """
 
 from pathlib import Path
+import hmac
+import os
 import sys
 
 # Ensure src/ is importable
@@ -24,6 +26,7 @@ from app.components import (
     render_document_summary,
     render_document_visualizations,
     render_explanation_card,
+    render_global_styles,
     render_header,
     render_metrics_dashboard,
     render_methodology_tab,
@@ -62,42 +65,138 @@ ensure_dirs()
 
 # ── Sidebar Navigation & Model Selector ──────────────────────────────────────
 
+def _get_login_credentials():
+    """Read optional login credentials from Streamlit secrets or environment variables."""
+    configured_user = os.getenv("PRG4206_LOGIN_USERNAME", "")
+    configured_password = os.getenv("PRG4206_LOGIN_PASSWORD", "")
+    try:
+        auth_config = st.secrets.get("auth", {})
+        configured_user = auth_config.get("username", configured_user)
+        configured_password = auth_config.get("password", configured_password)
+    except Exception:
+        # Streamlit secrets are optional for the local/demo deployment.
+        pass
+    return str(configured_user or ""), str(configured_password or "")
+
+
+def render_login_screen():
+    """Render an attractive login gateway; support an explicitly labelled demo mode."""
+    st.markdown(
+        """
+        <div class="ff-topline">
+          <div class="ff-brand"><span class="ff-mark">TS</span><span>TEXT SIGNAL<br><span style="color:#a0a990;font-size:.72rem;font-weight:400;">PRG4206 Research Console</span></span></div>
+          <div class="ff-status">RESEARCH ACCESS</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    col_copy, col_form = st.columns([1.15, .85], gap="large")
+    with col_copy:
+        st.markdown('<div class="ff-mini">A machine-learning research workspace</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="ff-login-title">Read the text.<br><span>Find the signal.</span></div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            '<div class="ff-login-copy">Compare human-written and AI-generated text using three saved models. Explore the evidence behind a prediction, review benchmark results, and inspect long documents one section at a time.</div>',
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+            <div class="ff-hero-foot" style="margin-top:1.6rem;">
+              <span class="ff-chip">01 / Text detection</span>
+              <span class="ff-chip">02 / Model comparison</span>
+              <span class="ff-chip">03 / Explainability</span>
+            </div>
+            <div style="height:1px;background:rgba(226,239,197,.16);margin:2rem 0 1rem;"></div>
+            <div class="ff-mini">Built for PRG4206 · Individual Machine Learning Assignment</div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with col_form:
+        st.markdown(
+            """
+            <div class="ff-lime-card" style="margin-bottom:1rem;">
+              <div class="ff-mini" style="color:#313a1b;">WELCOME BACK</div>
+              <h3 style="font-size:2rem;line-height:1.05;margin:.55rem 0 .45rem;">Your workspace,<br>ready when you are.</h3>
+              <p style="margin:0;">Sign in to continue to the detection dashboard.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        expected_user, expected_password = _get_login_credentials()
+        with st.form("text_signal_login", clear_on_submit=False):
+            username = st.text_input("Email or username", placeholder="you@example.com")
+            password = st.text_input("Password", type="password", placeholder="Enter your password")
+            submitted = st.form_submit_button("Sign in  →", use_container_width=True)
+
+        if submitted:
+            if expected_user and expected_password:
+                valid_user = hmac.compare_digest(username.strip(), expected_user)
+                valid_password = hmac.compare_digest(password, expected_password)
+                if valid_user and valid_password:
+                    st.session_state["text_signal_authenticated"] = True
+                    st.session_state["text_signal_access_mode"] = "Configured account"
+                    st.rerun()
+                else:
+                    st.error("The username or password doesn't match the configured account.")
+            else:
+                st.error(
+                    "Login credentials are not configured for this deployment yet. "
+                    "Use demo access below, or configure an [auth] section in Streamlit secrets."
+                )
+
+        if not (expected_user and expected_password):
+            st.markdown(
+                '<p class="ff-mini" style="margin:.7rem 0 .35rem;color:#a0a990;">DEMO ENVIRONMENT · NO ACCOUNT SETUP</p>',
+                unsafe_allow_html=True,
+            )
+            if st.button("Explore demo workspace  ↗", use_container_width=True, key="text_signal_demo_access"):
+                st.session_state["text_signal_authenticated"] = True
+                st.session_state["text_signal_access_mode"] = "Public demo"
+                st.rerun()
+            st.caption(
+                "Demo access is open because no account credentials are configured. "
+                "This is a UI access gate, not a substitute for production authentication."
+            )
+
+        st.markdown(
+            '<div class="ff-mini" style="margin-top:1rem;">No personal document is saved by this login screen.</div>',
+            unsafe_allow_html=True,
+        )
+
+
 def render_sidebar():
-    """Render a compact Apple-inspired top navigation and model selector."""
-    brand_col, nav_col, model_col = st.columns([1.15, 5.9, 1.75])
+    """Render the compact app navigation, model selector, and sign-out control."""
+    brand_col, nav_col, model_col, logout_col = st.columns([1.25, 4.9, 1.6, .75])
     with brand_col:
         st.markdown(
             """
-            <div class="apple-topbar">
-              <span class="apple-brand-mark">AI</span>
-              <span>Text Intelligence<br><span style="font-weight:400;color:#6e6e73;font-size:.72rem;">PRG4206 Research</span></span>
+            <div class="ff-brand" style="padding:.45rem 0;">
+              <span class="ff-mark">TS</span>
+              <span>TEXT SIGNAL<br><span style="color:#a0a990;font-size:.68rem;font-weight:400;">Research Console</span></span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    nav_options = ["Detect", "Documents", "Performance", "Explainability", "Methodology"]
+    nav_options = ["Detect", "Documents", "Results", "Explain", "About"]
     with nav_col:
         nav_page = st.radio(
             "Main navigation",
             nav_options,
             horizontal=True,
             label_visibility="collapsed",
-            format_func=lambda value: {
-                "Detect": "Detect",
-                "Documents": "Documents",
-                "Performance": "Results",
-                "Explainability": "Explain",
-                "Methodology": "About",
-            }.get(value, value),
             index=0,
-            key="prg_main_navigation",
+            key="text_signal_navigation",
         )
 
     available_models = get_available_models()
     with model_col:
         if not available_models:
-            st.error("No saved models detected.")
+            st.error("Saved models not found.")
             selected_model = None
         else:
             default_idx = available_models.index("Linear SVM") if "Linear SVM" in available_models else 0
@@ -105,13 +204,18 @@ def render_sidebar():
                 "Active model",
                 options=available_models,
                 index=default_idx,
-                key="prg_active_model",
+                key="text_signal_active_model",
+                label_visibility="collapsed",
             )
+            st.caption("ACTIVE MODEL")
 
-    st.markdown(
-        '<div style="height:1px;background:#e5e5ea;margin:.1rem 0 1.3rem 0;"></div>',
-        unsafe_allow_html=True,
-    )
+    with logout_col:
+        if st.button("Log out", key="text_signal_logout", use_container_width=True):
+            st.session_state["text_signal_authenticated"] = False
+            st.session_state.pop("text_signal_access_mode", None)
+            st.rerun()
+
+    st.markdown('<div style="height:1px;background:rgba(226,239,197,.16);margin:.25rem 0 1.2rem;"></div>', unsafe_allow_html=True)
     return nav_page, selected_model
 
 
@@ -300,6 +404,13 @@ def page_document_analysis(selected_model: str):
 # ── Main Application Routing ─────────────────────────────────────────────────
 
 def main():
+    render_global_styles()
+    st.session_state.setdefault("text_signal_authenticated", False)
+
+    if not st.session_state["text_signal_authenticated"]:
+        render_login_screen()
+        return
+
     nav_page, selected_model = render_sidebar()
     render_header()
 
@@ -308,15 +419,22 @@ def main():
         render_disclaimer()
         return
 
+    # Small contextual strip under the hero, styled in the acid-lime palette.
+    access_mode = st.session_state.get("text_signal_access_mode", "Configured account")
+    st.markdown(
+        f'<div class="ff-band"><strong>Workspace ready.</strong><p>Access mode: {access_mode} &nbsp; · &nbsp; Active model: {selected_model}. Select a section above to explore the detector.</p></div>',
+        unsafe_allow_html=True,
+    )
+
     if nav_page == "Detect":
         page_home_detection(selected_model)
     elif nav_page == "Documents":
         page_document_analysis(selected_model)
-    elif nav_page == "Performance":
+    elif nav_page == "Results":
         render_metrics_dashboard()
-    elif nav_page == "Explainability":
+    elif nav_page == "Explain":
         render_xai_deep_dive()
-    elif nav_page == "Methodology":
+    elif nav_page == "About":
         render_methodology_tab()
 
     render_disclaimer()

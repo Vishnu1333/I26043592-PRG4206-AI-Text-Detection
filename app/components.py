@@ -378,41 +378,40 @@ def render_explanation_card(exps: List[Dict[str, Any]], model_name: str = "Linea
 # ── Document Analysis Components ─────────────────────────────────────────────
 
 def render_document_summary(analysis: Dict[str, Any]):
-    """Render a FinMind-inspired glass card with document classification and key counts."""
+    """Render a clean light document-estimate panel."""
     overall = analysis["overall_prediction"]
     conf = analysis["overall_confidence"]
     is_ai = overall == "AI-Generated"
-    bg = "linear-gradient(145deg,rgba(71,31,51,.92),rgba(27,20,38,.96))" if is_ai else "linear-gradient(145deg,rgba(17,58,61,.92),rgba(15,31,43,.96))"
-    border = "rgba(251,113,133,.60)" if is_ai else "rgba(74,222,173,.54)"
-    text_color = "#fda4af" if is_ai else "#6ee7b7"
-    icon = "✦" if is_ai else "◎"
+    bg = "#fff5f5" if is_ai else "#f0faf5"
+    border = "#f3c5c5" if is_ai else "#bfe8d2"
+    color = "#b42318" if is_ai else "#087443"
+    icon = "✦" if is_ai else "✓"
 
     st.markdown(
         f"""
         <div style="background:{bg};border:1px solid {border};border-radius:18px;
-                    padding:23px 25px;margin:16px 0 22px 0;
-                    box-shadow:0 16px 36px rgba(0,0,0,.18);">
+                    padding:22px 25px;margin:16px 0 22px 0;">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;">
             <div>
-              <div style="font-size:.7rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:{text_color};">
-                Document assessment
+              <div style="font-size:.72rem;font-weight:650;letter-spacing:.12em;text-transform:uppercase;color:{color};">
+                Document estimate
               </div>
-              <div style="color:#f5f7ff;font-size:clamp(1.55rem,3vw,2.1rem);font-weight:800;letter-spacing:-.035em;margin:7px 0 5px;">
+              <div style="color:#1d1d1f;font-size:clamp(1.5rem,3vw,2.1rem);font-weight:700;letter-spacing:-.04em;margin:7px 0 5px;">
                 {icon} {overall}
               </div>
-              <div style="font-size:.86rem;color:#b5c4da;">
-                File <b style="color:#eaf0fc;">{analysis.get('filename', 'document')}</b>
-                &nbsp;·&nbsp; Model <b style="color:#eaf0fc;">{analysis.get('model_used', 'Linear SVM')}</b>
+              <div style="font-size:.86rem;color:#6e6e73;">
+                File <b style="color:#1d1d1f;">{analysis.get('filename', 'document')}</b>
+                &nbsp;·&nbsp; Model <b style="color:#1d1d1f;">{analysis.get('model_used', 'Linear SVM')}</b>
               </div>
             </div>
-            <div style="background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.11);
+            <div style="background:rgba(255,255,255,.85);border:1px solid rgba(0,0,0,.055);
                         border-radius:14px;padding:12px 16px;min-width:145px;">
-              <div style="font-size:.72rem;color:#b5c4da;margin-bottom:4px;">Aggregate confidence</div>
-              <div style="font-size:2.05rem;line-height:1.2;font-weight:800;color:{text_color};">{conf * 100:.1f}%</div>
+              <div style="font-size:.72rem;color:#6e6e73;margin-bottom:4px;">Aggregate confidence</div>
+              <div style="font-size:2rem;line-height:1.2;font-weight:700;color:{color};">{conf * 100:.1f}%</div>
             </div>
           </div>
-          <div style="margin-top:14px;font-size:.78rem;color:#c2cde0;line-height:1.6;">
-            Estimate aggregated from chunk-level predictions. It has not been validated as a separate document-level benchmark.
+          <div style="margin-top:14px;font-size:.79rem;color:#6e6e73;line-height:1.6;">
+            Estimate aggregated from chunk-level predictions; not independently validated as document-level accuracy.
           </div>
         </div>
         """,

@@ -420,55 +420,67 @@ def render_document_summary(analysis: Dict[str, Any]):
 
 
 def render_document_visualizations(analysis: Dict[str, Any]):
-    """Render interactive chunk distribution and chronological timeline charts."""
-    st.markdown("#### 📊 Document Visualizations & Chunk Timeline")
+    """Render dark-canvas document charts with acid-lime highlights."""
+    st.markdown('<div class="ff-section-label">DOCUMENT BREAKDOWN</div>', unsafe_allow_html=True)
+    st.markdown("### The document, in segments")
 
     chunks = analysis["chunks"]
     df_chunks = pd.DataFrame(chunks)
+    if df_chunks.empty or "chunk_index" not in df_chunks or "ai_probability" not in df_chunks:
+        st.info("There are no chunk-level values to visualise for this document.")
+        return
 
-    col1, col2 = st.columns([1, 2])
-
+    col1, col2 = st.columns([1, 2], gap="large")
     with col1:
-        # Pie / Donut Chart of AI vs Human Chunks
-        st.markdown("##### Chunk Classification Breakdown")
+        st.markdown("##### Classification mix")
         fig, ax = plt.subplots(figsize=(5, 4))
-        labels = ["Human Chunks", "AI Chunks"]
+        fig.patch.set_facecolor("#1b2210")
+        ax.set_facecolor("#1b2210")
+        labels = ["Human chunks", "AI chunks"]
         counts = [analysis["human_chunks"], analysis["ai_chunks"]]
-        colors = ["#22c55e", "#ef4444"]
-
-        # Only plot non-zero wedges
-        non_zero = [(l, c, cl) for l, c, cl in zip(labels, counts, colors) if c > 0]
+        colors = ["#b1dd40", "#758c37"]
+        non_zero = [(label, count, color) for label, count, color in zip(labels, counts, colors) if count > 0]
         if non_zero:
-            n_labels, n_counts, n_colors = zip(*non_zero)
+            shown_labels, shown_counts, shown_colors = zip(*non_zero)
             wedges, texts, autotexts = ax.pie(
-                n_counts,
-                labels=n_labels,
+                shown_counts,
+                labels=shown_labels,
                 autopct="%1.1f%%",
                 startangle=90,
-                colors=n_colors,
-                textprops=dict(color="#1e293b", weight="bold"),
-                wedgeprops=dict(width=0.45, edgecolor="white", linewidth=2),
+                colors=shown_colors,
+                textprops=dict(color="#eff2e7", weight="bold", fontsize=9),
+                wedgeprops=dict(width=0.43, edgecolor="#111606", linewidth=2),
             )
-        ax.set_title("Chunk Distribution", fontsize=11, fontweight="bold")
+            for autotext in autotexts:
+                autotext.set_color("#111606")
+                autotext.set_fontweight("bold")
+        ax.set_title("Chunk distribution", fontsize=11, fontweight="bold", color="#eff2e7", pad=15)
         plt.tight_layout()
         st.pyplot(fig)
         plt.close(fig)
 
     with col2:
-        # Sequential timeline of AI probability across chunk indices
-        st.markdown("##### Chunk-by-Chunk AI Probability Timeline")
+        st.markdown("##### AI probability, from start to finish")
         fig, ax = plt.subplots(figsize=(8, 4))
+        fig.patch.set_facecolor("#1b2210")
+        ax.set_facecolor("#1b2210")
         indices = df_chunks["chunk_index"].values
         probs = df_chunks["ai_probability"].values
-        colors = ["#ef4444" if p >= 0.50 else "#22c55e" for p in probs]
-
-        bars = ax.bar(indices, probs, color=colors, width=0.6, edgecolor="none", alpha=0.9)
-        ax.axhline(0.50, color="#64748b", linestyle="--", linewidth=1.2, label="Decision Threshold (0.50)")
+        colors = ["#b1dd40" if p >= 0.50 else "#6d7d3a" for p in probs]
+        ax.bar(indices, probs, color=colors, width=0.62, edgecolor="none", alpha=0.96)
+        ax.axhline(0.50, color="#d8e7bc", linestyle="--", linewidth=1.1, label="0.50 decision threshold")
         ax.set_ylim(0, 1.05)
-        ax.set_xlabel("Chunk Index (Ordered Through Document)", fontsize=9, fontweight="bold")
-        ax.set_ylabel("AI Probability", fontsize=9, fontweight="bold")
-        ax.set_title("Sequential Chunk Scoring Timeline", fontsize=11, fontweight="bold")
-        ax.legend(loc="upper right", fontsize=8)
+        ax.set_xlabel("Chunk index", fontsize=9, fontweight="bold", color="#d4dcc6")
+        ax.set_ylabel("AI probability", fontsize=9, fontweight="bold", color="#d4dcc6")
+        ax.set_title("Chunk-level scoring timeline", fontsize=11, fontweight="bold", color="#eff2e7", pad=15)
+        ax.tick_params(colors="#a0a990", labelsize=8)
+        for spine in ax.spines.values():
+            spine.set_color("#4b5734")
+        ax.grid(axis="y", color="#354026", alpha=.55, linewidth=.65)
+        ax.set_axisbelow(True)
+        legend = ax.legend(loc="upper right", fontsize=8, frameon=False)
+        for label in legend.get_texts():
+            label.set_color("#d4dcc6")
         plt.tight_layout()
         st.pyplot(fig)
         plt.close(fig)

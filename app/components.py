@@ -160,19 +160,44 @@ def render_header():
         hr { border-color: #e5e5ea; }
         a { color: #0066cc !important; }
         [data-testid="stRadio"] [role="radiogroup"] {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 0.2rem;
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            align-items: center !important;
+            justify-content: center;
+            gap: 0.16rem;
+            width: 100%;
         }
-        [data-testid="stRadio"] label {
+        [data-testid="stRadio"] [role="radiogroup"] > label {
+            flex: 0 1 auto;
+            min-width: 0;
+            white-space: nowrap !important;
+            opacity: 1 !important;
             border-radius: 999px;
-            padding: 0.38rem 0.72rem;
+            padding: 0.42rem 0.58rem;
+            margin: 0 !important;
             border: 1px solid transparent;
-        }
-        [data-testid="stRadio"] label p {
+            background: #f5f5f7;
             color: #424245 !important;
-            font-size: 0.84rem;
+            transition: background 140ms ease, border-color 140ms ease;
+        }
+        [data-testid="stRadio"] [role="radiogroup"] > label * {
+            opacity: 1 !important;
+        }
+        [data-testid="stRadio"] [role="radiogroup"] > label p,
+        [data-testid="stRadio"] [role="radiogroup"] > label div,
+        [data-testid="stRadio"] [role="radiogroup"] > label span {
+            color: #424245 !important;
+            font-size: 0.82rem !important;
+            white-space: nowrap !important;
+        }
+        [data-testid="stRadio"] [role="radiogroup"] > label:has(input:checked) {
+            background: #e8f2ff !important;
+            border-color: #b8d5fb !important;
+        }
+        [data-testid="stRadio"] [role="radiogroup"] > label:hover {
+            background: #e9e9eb !important;
+            border-color: #d2d2d7 !important;
         }
         .apple-topbar {
             display: flex;

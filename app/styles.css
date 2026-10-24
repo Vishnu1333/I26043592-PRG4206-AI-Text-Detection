@@ -1069,3 +1069,104 @@ body { text-rendering: optimizeLegibility; }
     .ff-login-welcome { padding: 1.15rem !important; border-radius: 18px !important; }
     [data-testid="stForm"] { padding: 1rem !important; border-radius: 18px !important; }
 }
+
+
+/* Alignment pass: constrain the login stack and target the password toggle separately. */
+/* When Streamlit stacks its columns, keep the form stack compact and centered. */
+.main .block-container:has(.ff-login-welcome) {
+    max-width: 1180px;
+    padding-top: 2rem !important;
+}
+[data-testid="column"]:has(.ff-login-welcome) {
+    max-width: 620px !important;
+    width: 100% !important;
+    margin-inline: auto !important;
+}
+.ff-login-welcome {
+    padding: 1.2rem 1.3rem 1.15rem !important;
+    border-radius: 18px !important;
+}
+[data-testid="stForm"] {
+    padding: 1rem 1rem .9rem !important;
+    border-radius: 18px !important;
+}
+[data-testid="stForm"] [data-testid="stTextInput"] {
+    margin-bottom: .35rem;
+}
+[data-testid="stForm"] [data-baseweb="input"] > div {
+    min-height: 3rem !important;
+    border-radius: 11px !important;
+    overflow: hidden;
+}
+/* Only the submit action should receive the lime CTA styling. */
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-height: 3rem !important;
+    margin-top: .2rem !important;
+    padding: .7rem 1rem !important;
+    border: 1px solid var(--ff-lime) !important;
+    border-radius: 999px !important;
+    background: var(--ff-lime) !important;
+    color: var(--ff-ink) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 22px rgba(177,221,64,.10) !important;
+}
+[data-testid="stForm"] [data-testid="stFormSubmitButton"] button:hover {
+    background: var(--ff-lime-bright) !important;
+    border-color: var(--ff-lime-bright) !important;
+    color: var(--ff-ink) !important;
+    transform: translateY(-1px);
+}
+/* The password reveal is a small neutral icon control, not a second CTA. */
+[data-testid="stForm"] [data-baseweb="input"] button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 2.8rem !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 10px 10px 0 !important;
+    background: transparent !important;
+    color: #a0a990 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] button:hover {
+    background: rgba(177,221,64,.09) !important;
+    color: var(--ff-lime-bright) !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+[data-testid="stForm"] [data-baseweb="input"] button svg {
+    color: currentColor !important;
+    fill: currentColor !important;
+}
+[data-testid="stButton"] button,
+[data-testid="stButton"] button * {
+    color: var(--ff-ink) !important;
+}
+[data-testid="stButton"] button {
+    width: 100%;
+    min-height: 3rem;
+    padding: .7rem 1rem;
+    line-height: 1.25;
+}
+@media (max-width: 767px) {
+    .main .block-container:has(.ff-login-welcome) {
+        padding-top: 1.5rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    [data-testid="column"]:has(.ff-login-welcome) {
+        max-width: 100% !important;
+    }
+    .ff-login-welcome { padding: 1.1rem !important; }
+    [data-testid="stForm"] { padding: .9rem !important; }
+}

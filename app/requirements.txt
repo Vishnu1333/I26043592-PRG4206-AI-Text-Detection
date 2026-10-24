@@ -1,4 +1,4 @@
-# Lean Streamlit Cloud runtime for Python 3.11.
+# Lean Streamlit Cloud runtime for Python 3.12.
 # Heavy optional training/explainability packages (torch, transformers, SHAP, LIME)
 # are not required to serve the three bundled models or display saved SHAP plots.
 streamlit==1.38.0

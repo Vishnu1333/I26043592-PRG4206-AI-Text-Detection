@@ -1358,3 +1358,93 @@ body { text-rendering: optimizeLegibility; }
 [data-testid="stHorizontalBlock"]:has([data-testid="stRadio"]) {
     border-bottom: 0 !important;
 }
+
+
+/* Final dashboard header fix: real nav buttons, no radio dots or divider line. */
+/* Remove the extra horizontal lines around the workspace navigation. */
+[data-testid="stHeader"] {
+    border-bottom: 0 !important;
+    box-shadow: none !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) {
+    position: relative !important;
+    top: auto !important;
+    z-index: 2 !important;
+    padding: .25rem 0 .6rem !important;
+    margin: 0 0 .65rem !important;
+    min-height: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-bottom: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="column"] {
+    min-width: 0 !important;
+    align-self: center !important;
+}
+/* Navigation buttons live in the nested six-column button row. */
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    padding: .48rem .35rem !important;
+    border-radius: 999px !important;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    color: #d7dfc8 !important;
+    box-shadow: none !important;
+    font-size: .82rem !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    transform: none !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button:hover {
+    background: rgba(177,221,64,.09) !important;
+    border-color: rgba(177,221,64,.26) !important;
+    color: var(--ff-lime-bright) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button[kind="primary"],
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button[data-testid="baseButton-primary"] {
+    background: var(--ff-lime) !important;
+    border-color: var(--ff-lime) !important;
+    color: var(--ff-ink) !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button[kind="primary"]:hover,
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button[data-testid="baseButton-primary"]:hover {
+    background: var(--ff-lime-bright) !important;
+    border-color: var(--ff-lime-bright) !important;
+    color: var(--ff-ink) !important;
+}
+[data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button p {
+    color: inherit !important;
+    margin: 0 !important;
+    font-size: inherit !important;
+    white-space: nowrap !important;
+}
+@media (max-width: 1100px) {
+    [data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button {
+        padding: .45rem .22rem !important;
+        font-size: .74rem !important;
+    }
+}
+@media (max-width: 850px) {
+    [data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) {
+        padding: .25rem 0 .5rem !important;
+        margin-bottom: .6rem !important;
+    }
+    [data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] {
+        gap: .12rem !important;
+    }
+    [data-testid="stHorizontalBlock"]:has([data-testid="stSelectbox"]) [data-testid="stHorizontalBlock"] [data-testid="stButton"] button {
+        white-space: normal !important;
+        min-height: 38px !important;
+        font-size: .68rem !important;
+    }
+}

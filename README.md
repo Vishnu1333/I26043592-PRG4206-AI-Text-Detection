@@ -245,19 +245,20 @@ The frontend has been rebuilt with an original **Flashform-inspired** visual dir
 
 ## Streamlit UI & Document Analysis Architecture
 
-The web interface features five primary navigation views:
+The web interface features a login gateway and six primary navigation views:
 
-1. **🏠 Home / Detection**: Single-text analysis with real-time surface statistics, class confidence meters, and local TF-IDF word attributions. Includes pre-loaded demonstration presets.
-2. **📄 Document Analysis**:
+1. **Overview**: Benchmark KPIs, model scorecards, and a quick map of the workspace.
+2. **Detect**: Single-text analysis with real-time surface statistics, class confidence meters, and local TF-IDF word attributions. Includes pre-loaded demonstration presets.
+3. **📄 Document Analysis**:
    - **Supported Formats**: Plain Text (`.txt`), Adobe PDF (`.pdf`), Microsoft Word (`.docx`).
    - **Text Extraction**: Multi-encoding fallback for text, full multi-page parsing for PDF, paragraph ordering for DOCX.
    - **Smart Chunking**: Configurable chunk boundaries (`min_chunk_words=50`, `max_chunk_words=250`) that preserve paragraph and sentence integrity while avoiding under-sized or truncated fragments.
    - **Document Aggregation**: Calculates word-weighted AI probability, aggregate confidence, AI chunk percentage, and class determination.
    - **Visualizations**: Interactive donut breakdown chart and chronological chunk-by-chunk probability timeline.
    - **Passage Deep Dive**: Inspects top 3 most AI-like and top 3 most Human-like passages, plus full chunk table with CSV download.
-3. **📊 Model Performance**: Verified held-out test metrics table, McNemar significance cards, ROC curves, confusion matrices, and domain-wise breakdowns across 5 HC3 categories.
+4. **📊 Model Performance**: Verified held-out test metrics table, McNemar significance cards, ROC curves, confusion matrices, and domain-wise breakdowns across 5 HC3 categories.
 4. **🔍 Explainability (XAI)**: Global SHAP TreeExplainer plots for 21 stylometric features, linear feature weights, and interactive local explanations.
-5. **ℹ️ About / Methodology**: Dataset schema, experimental controls, limitations, and ethical guidelines.
+6. **ℹ️ About / Methodology**: Dataset schema, experimental controls, limitations, and ethical guidelines.
 
 ---
 

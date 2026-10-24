@@ -170,7 +170,7 @@ def render_login_screen():
 
 def render_sidebar():
     """Render the compact app navigation, model selector, and sign-out control."""
-    brand_col, nav_col, model_col, logout_col = st.columns([1.25, 4.9, 1.6, .75])
+    brand_col, nav_col, model_col, logout_col = st.columns([1.2, 5.0, 1.65, .75])
     with brand_col:
         st.markdown(
             """
@@ -182,7 +182,7 @@ def render_sidebar():
             unsafe_allow_html=True,
         )
 
-    nav_options = ["Detect", "Documents", "Results", "Explain", "About"]
+    nav_options = ["Overview", "Detect", "Docs", "Results", "Explain", "About"]
     with nav_col:
         nav_page = st.radio(
             "Main navigation",
@@ -217,6 +217,98 @@ def render_sidebar():
 
     st.markdown('<div style="height:1px;background:rgba(226,239,197,.16);margin:.25rem 0 1.2rem;"></div>', unsafe_allow_html=True)
     return nav_page, selected_model
+
+
+# ── Page 0: Dashboard Overview ───────────────────────────────────────────────
+
+def page_dashboard_overview(selected_model: str):
+    """Render the first-screen dashboard summary after login."""
+    st.markdown('<div class="ff-section-label">00 / OVERVIEW</div>', unsafe_allow_html=True)
+    st.markdown("### A quick read of the system.")
+    st.markdown(
+        "An at-a-glance view of the benchmark, the three saved classifiers, and the tools available in this workspace."
+    )
+
+    k1, k2, k3, k4 = st.columns(4)
+    k1.metric("Clean HC3 samples", "79,331", help="53,086 human-written and 26,245 AI-generated samples.")
+    k2.metric("Held-out test set", "11,900", help="A stratified test split shared by the evaluated models.")
+    k3.metric("Models evaluated", "03", help="Linear SVM, Logistic Regression, and XGBoost.")
+    k4.metric("Top accuracy", "98.61%", help="Observed Linear SVM accuracy on the held-out benchmark.")
+
+    st.markdown(" ")
+    left, right = st.columns([1.2, .8], gap="large")
+    with left:
+        st.markdown('<div class="ff-section-label">MODEL SCORECARDS</div>', unsafe_allow_html=True)
+        st.markdown("#### Three approaches. One benchmark.")
+        model_cols = st.columns(3, gap="small")
+        model_cards = [
+            ("01", "Linear SVM", "98.61%", "F1  ·  0.9790", "TF-IDF + calibrated linear classifier"),
+            ("02", "Logistic Regression", "98.53%", "F1  ·  0.9777", "TF-IDF baseline with class weighting"),
+            ("03", "XGBoost", "96.95%", "F1  ·  0.9543", "21 engineered stylometric features"),
+        ]
+        for col, (number, name, accuracy, f1, detail) in zip(model_cols, model_cards):
+            with col:
+                st.markdown(
+                    f"""
+                    <div style="height:100%;min-height:200px;background:#1b2210;border:1px solid rgba(226,239,197,.16);
+                                border-radius:17px;padding:16px 15px;box-shadow:0 10px 24px rgba(0,0,0,.09);">
+                      <div style="font-family:'DM Mono',monospace;color:#b1dd40;font-size:.67rem;letter-spacing:.12em;">MODEL {number}</div>
+                      <div style="font-family:'Space Grotesk',sans-serif;color:#eff2e7;font-size:1.08rem;line-height:1.15;font-weight:700;letter-spacing:-.04em;margin:14px 0 10px;">{name}</div>
+                      <div style="font-family:'Space Grotesk',sans-serif;color:#b1dd40;font-size:1.85rem;font-weight:700;letter-spacing:-.06em;">{accuracy}</div>
+                      <div style="font-family:'DM Mono',monospace;color:#dbe7c4;font-size:.72rem;margin-top:3px;">{f1}</div>
+                      <div style="font-size:.76rem;color:#a0a990;line-height:1.45;margin-top:14px;">{detail}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+    with right:
+        st.markdown(
+            """
+            <div class="ff-lime-card" style="min-height:200px;">
+              <div style="font-family:'DM Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;">Start here</div>
+              <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.8rem;line-height:1;letter-spacing:-.055em;margin:14px 0 12px;">
+                Try a passage.<br>Inspect the evidence.
+              </div>
+              <p style="font-size:.88rem;line-height:1.55;margin:0;">
+                Run detection on a text sample, compare models, or upload a document for chunk-level review.
+              </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            """
+            <div style="margin-top:12px;border:1px solid rgba(226,239,197,.16);border-radius:16px;background:rgba(255,255,255,.02);padding:16px 17px;">
+              <div class="ff-mini">RESEARCH NOTE</div>
+              <p style="margin:.65rem 0 0;font-size:.84rem;">
+                A high benchmark score does not establish who wrote a passage. Review errors and limitations before interpreting a prediction.
+              </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    st.markdown('<div class="ff-section-label" style="margin-top:1.6rem;">WORKSPACE MAP</div>', unsafe_allow_html=True)
+    route_cols = st.columns(5, gap="small")
+    routes = [
+        ("01", "Detect", "Paste text and inspect a prediction."),
+        ("02", "Documents", "Upload TXT, PDF or DOCX."),
+        ("03", "Results", "Compare metrics and domain scores."),
+        ("04", "Explain", "Explore feature attribution."),
+        ("05", "About", "Read the research method and caveats."),
+    ]
+    for col, (number, title, description) in zip(route_cols, routes):
+        with col:
+            st.markdown(
+                f"""
+                <div style="border-top:2px solid #b1dd40;padding-top:12px;">
+                  <div style="font-family:'DM Mono',monospace;font-size:.67rem;color:#b1dd40;">{number}</div>
+                  <div style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#eff2e7;margin:.45rem 0;">{title}</div>
+                  <div style="font-size:.78rem;line-height:1.45;color:#a0a990;">{description}</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 
 # ── Page 1: Home / Detection (Single Text Input) ──────────────────────────────
@@ -434,9 +526,11 @@ def main():
         unsafe_allow_html=True,
     )
 
-    if nav_page == "Detect":
+    if nav_page == "Overview":
+        page_dashboard_overview(selected_model)
+    elif nav_page == "Detect":
         page_home_detection(selected_model)
-    elif nav_page == "Documents":
+    elif nav_page == "Docs":
         page_document_analysis(selected_model)
     elif nav_page == "Results":
         render_metrics_dashboard()

@@ -54,7 +54,7 @@ st.set_page_config(
     page_title="AI Text Detector | PRG4206",
     page_icon="🤖",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 ensure_dirs()
@@ -63,102 +63,48 @@ ensure_dirs()
 # ── Sidebar Navigation & Model Selector ──────────────────────────────────────
 
 def render_sidebar():
-    """Render sidebar navigation, model selector, and system metadata."""
-    st.sidebar.markdown(
-        """
-        <div style="padding: 8px 4px 16px 4px;">
-          <div style="display:flex;align-items:center;gap:11px;">
-            <div style="height:44px;width:44px;min-width:44px;border-radius:14px;
-                        display:flex;align-items:center;justify-content:center;
-                        background:linear-gradient(145deg,#6d8cff,#29c4d7);
-                        color:#071225;font-size:1.05rem;font-weight:900;
-                        box-shadow:0 8px 20px rgba(70,112,244,.28);">
-              AI
+    """Render a compact Apple-inspired top navigation and model selector."""
+    brand_col, nav_col, model_col = st.columns([1.35, 4.2, 1.65])
+    with brand_col:
+        st.markdown(
+            """
+            <div class="apple-topbar">
+              <span class="apple-brand-mark">AI</span>
+              <span>Text Intelligence<br><span style="font-weight:400;color:#6e6e73;font-size:.72rem;">PRG4206 Research</span></span>
             </div>
-            <div>
-              <div style="font-size:1.03rem;font-weight:800;letter-spacing:-.02em;color:#f1f5ff;">
-                TEXT INTELLIGENCE
-              </div>
-              <div style="font-size:.74rem;color:#9db0d0;margin-top:3px;">
-                PRG4206 · Research workspace
-              </div>
-            </div>
-          </div>
-          <div style="height:1px;background:linear-gradient(90deg,rgba(119,151,255,.55),rgba(119,151,255,0));margin-top:18px;"></div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.sidebar.markdown("---")
-
-    nav_page = st.sidebar.radio(
-        "Navigation",
-        [
-            "🏠 Home / Detection",
-            "📄 Document Analysis",
-            "📊 Model Performance",
-            "🔍 Explainability",
-            "ℹ️ About / Methodology",
-        ],
-        index=0,
-    )
-
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("### ⚙️ Model Selection")
-
-    available_models = get_available_models()
-    if not available_models:
-        st.sidebar.error("⚠️ No trained models detected in `models/`.")
-        selected_model = None
-    else:
-        # Default to Linear SVM as it has highest verified accuracy (0.9861)
-        default_idx = 0
-        if "Linear SVM" in available_models:
-            default_idx = available_models.index("Linear SVM")
-
-        selected_model = st.sidebar.selectbox(
-            "Active Classification Model",
-            options=available_models,
-            index=default_idx,
-            help="Linear SVM is selected by default based on benchmark test accuracy (0.9861).",
+            """,
+            unsafe_allow_html=True,
         )
 
-        st.sidebar.caption(f"Currently active: **{selected_model}**")
+    nav_options = ["Detect", "Documents", "Performance", "Explainability", "Methodology"]
+    with nav_col:
+        nav_page = st.radio(
+            "Main navigation",
+            nav_options,
+            horizontal=True,
+            label_visibility="collapsed",
+            index=0,
+            key="prg_main_navigation",
+        )
 
-    st.sidebar.markdown("---")
-    st.sidebar.markdown(
-        """
-        <div style="background:linear-gradient(145deg,rgba(25,42,70,.92),rgba(14,25,43,.94));
-                    border:1px solid rgba(145,169,219,.2);border-radius:15px;
-                    padding:14px 14px 12px;font-size:.79rem;color:#c8d5eb;
-                    box-shadow:0 10px 24px rgba(0,0,0,.12);">
-          <div style="font-size:.7rem;color:#8fb4ff;letter-spacing:.13em;font-weight:800;text-transform:uppercase;margin-bottom:10px;">
-            Benchmark snapshot
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;">
-            <span style="color:#9fb0ce;">Corpus</span><b style="color:#f1f5ff;">HC3 · 2023</b>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;">
-            <span style="color:#9fb0ce;">Clean samples</span><b style="color:#f1f5ff;">79,331</b>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;">
-            <span style="color:#9fb0ce;">Held-out test</span><b style="color:#f1f5ff;">11,900</b>
-          </div>
-          <div style="height:1px;background:rgba(145,169,219,.17);margin:8px 0;"></div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;">
-            <span style="color:#9fb0ce;">Linear SVM · F1</span><b style="color:#65e2bc;">0.9790</b>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;">
-            <span style="color:#9fb0ce;">Logistic Reg. · F1</span><b style="color:#65e2bc;">0.9777</b>
-          </div>
-          <div style="display:flex;justify-content:space-between;padding:4px 0;">
-            <span style="color:#9fb0ce;">XGBoost · F1</span><b style="color:#c8d5eb;">0.9543</b>
-          </div>
-        </div>
-        """,
+    available_models = get_available_models()
+    with model_col:
+        if not available_models:
+            st.error("No saved models detected.")
+            selected_model = None
+        else:
+            default_idx = available_models.index("Linear SVM") if "Linear SVM" in available_models else 0
+            selected_model = st.selectbox(
+                "Active model",
+                options=available_models,
+                index=default_idx,
+                key="prg_active_model",
+            )
+
+    st.markdown(
+        '<div style="height:1px;background:#e5e5ea;margin:.1rem 0 1.3rem 0;"></div>',
         unsafe_allow_html=True,
     )
-
     return nav_page, selected_model
 
 
@@ -375,23 +321,23 @@ def page_document_analysis(selected_model: str):
 # ── Main Application Routing ─────────────────────────────────────────────────
 
 def main():
-    render_header()
     nav_page, selected_model = render_sidebar()
+    render_header()
 
     if selected_model is None:
-        st.warning("Please ensure model files exist in `models/` before running inference.")
+        st.warning("Please ensure the saved model files exist in the models folder before running inference.")
         render_disclaimer()
         return
 
-    if nav_page == "🏠 Home / Detection":
+    if nav_page == "Detect":
         page_home_detection(selected_model)
-    elif nav_page == "📄 Document Analysis":
+    elif nav_page == "Documents":
         page_document_analysis(selected_model)
-    elif nav_page == "📊 Model Performance":
+    elif nav_page == "Performance":
         render_metrics_dashboard()
-    elif nav_page == "🔍 Explainability":
+    elif nav_page == "Explainability":
         render_xai_deep_dive()
-    elif nav_page == "ℹ️ About / Methodology":
+    elif nav_page == "Methodology":
         render_methodology_tab()
 
     render_disclaimer()
